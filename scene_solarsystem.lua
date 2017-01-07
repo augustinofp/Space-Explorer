@@ -91,7 +91,7 @@ function scene:create( event )
         planet_ss.anchorX = anchor
 
         --these conditional statements used to limit range of speed of planet revolution
-        if anchor <= -2.0 then
+        if anchor >= -2.0 then
             anchor = -6.0
 
         else
