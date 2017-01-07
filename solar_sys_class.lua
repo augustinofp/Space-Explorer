@@ -1,10 +1,11 @@
 local SolarSystem = {}
 SolarSystem.__index = SolarSystem
 
-function SolarSystem.new(planet_number, ring_size)
+function SolarSystem.new(planet_number, ring_size, start)
 	local self = setmetatable({}, SolarSystem)
 	self.planet_number = planet_number
 	self.ring_size = ring_size
+	self.start = start
 	return self
 end  
 
@@ -23,5 +24,13 @@ end
 
 function get_ring_size(self)
 	return self.ring_size
+end
+
+function get_start(self)
+	return self.start
+end
+
+function set_start(self, start)
+	self.start = start
 end
 
