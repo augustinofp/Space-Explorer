@@ -1,14 +1,19 @@
---scene_solarsystem.lua
-local Planet_class = require("planet_class")
-local master = require("master_storage")
 local composer = require( "composer" )
+local loadsave = require("loadsave")
+local planet = require("Planet_class")
+local system = require("Solar_system_class")
+local master = require("master_storage")
+local widget = require ("widget")
+local physics = require ("physics")
+
+
 local scene = composer.newScene()
-local widget = require "widget"
+
 widget.setTheme("widget_theme_ios7")
-local physics = require "physics"
+
+
 physics.start()
 physics.setGravity(0,0)
-
 
 
 -- -----------------------------------------------------------------------------------
@@ -18,29 +23,41 @@ physics.setGravity(0,0)
 
 -- local forward references should go here
 
+
+--assign local references to the object tables in master storage
+
 local universe = master.get_universe()
 local solar_sys = master.get_sys()
 local stars = master.get_stars()
 local planets = master.get_planets()
 
 --initialize ID local references
-local sys_ID = 0
-local star_ID = 0
-local P_ID = {}
-local rings = {}
-local planet_ss = {}
-local count = 1
 
- 
+local star_ID = 0
+local P_ID = event.params.P_ID
+local sys_ID = planets[P_ID].get_sysID()
+
 -- -----------------------------------------------------------------------------------
 -- Scene event functions
 -- -----------------------------------------------------------------------------------
 
-function goto_planet(num, event)
-    local options = {effect = "slideLeft", params = {P_ID[num]}}
+local function goto_solarsystem(event)
+    local options = {effect = "slideLeft", params = {P_ID, sys_ID}}
+
     if(event.phase == "ended") then 
-        composer.gotoScene("scene_planet", options)
+        composer.gotoScene("scene_solarsystem", options)
     end
+
+    return true
+end
+
+local function goto_menu(event)
+    
+    if(event.phase == "ended") then
+        --find a way to save information
+        composer.gotoScene("scene_menu")
+    end
+
     return true
 end
 
@@ -51,74 +68,48 @@ function scene:create( event )
     local sceneGroup = self.view
     -- Code here runs when the scene is first created but has not yet appeared on screen
 
-    --assign appropriate system, and star ID
-    sys_ID = planets[event.params.P_ID].get_sysID()
-    star_ID = sys_ID
-
-    display.setDefault( "isAnchorClamped", false )
-    
-    --Display the Appropriate star image/button
-    star = display.newImageRect(sceneGroup, stars[star_ID].get_image() , 100, 100)
-    star.x =  display.contentCenterX ; star.y = display.contentCenterY;
-
-    local circle = display.newCircle (sceneGroup, 100,100,200)
-    circle:setFillColor(0,0,0,0) --This will set the fill color to transparent
-    circle.strokeWidth = 3 --This is the width of the outline of the circle
-    circle.x = display.contentCenterX; circle.y = display.contentCenterY
-    circle:setStrokeColor(1,1,1) --This is the color of the outline
-
-
-    --assign the max value of for loop to be the total number of planets in the current solar system
-    local max = solar_sys.get_planet_number()
-    local ring_x = 200
-    local ring_y = 200
-    local anchor = -6.0
+    local planet = planets[event.params.P_ID]
+    sceneGroup:insert(planet)
    
+
+    planet.x = display.contentCenterX; planet.y = display.contentCenterY
     
+
+    
+    planet.isVisible = true
     
 
-    --returns integer representing starting index of corresponding planets to current solar system
-    local start = solar_sys.get_start()
-    local stop = start + max
+    
 
-    --for each planet in the current solar system: create a ring, and a corresponding revolving planet image/button
-    for i = start,stop do
-        P_ID[count] = i
-        --create rings
-        rings[count] = display.newImageRect(sceneGroup, "images/solar_ring.png", ring_x, ring_y)
-        local solar_ring = rings[count]
-        solar_ring.x = display.contentCenterX; solar_ring.y = display.contentCenterY
-        solar_ring.x = display.contentCenterX; solar_ring.y = display.contentCenterY
-        ring_x = ring_x + 100
-        ring_y = ring_x
-
-        if
-        --create  planet images
-        planet_ss[count] = widget.newButton{
-            defaultFile = planets[i].get_ssimage()
-        }
-
-        sceneGroup:insert(planet_ss[count])
-        planet_ss.anchorX = anchor
-
-        --these conditional statements used to limit range of speed of planet revolution
-        if anchor >= -2.0 then
-            anchor = -6.0
-
-        else
-            anchor = anchor - 2
-        end
-
-        --display revolving planet images, on the event that a planet button is touched, 
-        --call the appropriate planet even handler
-
-        planet_ss[count].x = display.contentCenterX; planet_ss[count].y = display.contentCenterY
-        transition.to( planet_ss[count], { time=40000, rotation=-360, iterations=0 } ) 
-         
-        planet_ss[count]:addEventListener("touch", goto_planet(count))
-        count = count + 1
+    local button_left = widget.newButton { 
+        width = 200,
+        height = 70, 
+        defaultFile = "images/left_arrow.png",
+        overFile = "images/left_arrow_overfile.png",
         
-    end 
+    }
+
+    local button_right = widget.newButton { 
+        width = 200,
+        height = 70, 
+        defaultFile = "images/right_arrow.png",
+        overFile = "images/right_arrow_overfile.png",
+        
+    }
+
+    sceneGroup:insert(button_left)
+    sceneGroup:insert(button_right)
+
+    button_left.x = display.contentCenterX; button_left.y = display.contentCenterY
+
+    button_left.isVisible = true
+    button_right.x = display.contentCenterX; button_right.y = display.contentCenterY
+
+    button_right.isVisible = true
+
+    
+    button_left:addEventListener("touch", goto_solarsystem())
+    button_right:addEventListener("touch", goto_menu())
 
 
 
@@ -138,6 +129,8 @@ function scene:create( event )
     animateBackground()
 
 end
+
+    -- Function of Buttons 
 
 
 -- show()

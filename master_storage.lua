@@ -1,3 +1,5 @@
+local planet_class = require("planetc-class")
+
 local planets = {}
 local p_buttons = {}
 local p_flags = {}
