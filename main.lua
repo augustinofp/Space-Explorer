@@ -1,8 +1,17 @@
 -- INCLUDE COMPOSER
-
 local composer = require( "composer" )
-composer.gotoScene( "scene_menu", {effect = "fade", time = 500})
+local data = require("data_storage")
 
+--Initialize master data file
+data.planets = {}
+data.stars = {}
+data.solar_sys = {}
+data.galaxy = {}
+data.universe = {}
+data.multiverse = {}
+data.params = {}
+data.params.P_ID = 0
+data.params.sys_ID = 0
 
 -- APP OPTIONS 
 
@@ -30,6 +39,7 @@ _B = display.viewableContentHeight - _T -- Bottom
 
 loadsave = require("loadsave")
 
+
 -- LOAD UP SOME AUDIO
 
 local soundTable = {
@@ -41,19 +51,6 @@ local soundTable = {
 }
 
 audio.play( soundTable["chimeSound"] )
-
-
-local Action_Box_Table = {
-
-    explorer_icon = display.newImageRect(sceneGroup, "images/explorer_icon.png", 160, 160),
-    transfer_box = display.newImage(sceneGroup, "images/variable_holder.png"),
-
-
-}
-
-local sceneTable = {main, scene_menu, scene_planet1,scene_planet2, scene_planet3, scene_solarsystem,scene_galaxy, scene_howtoplay}
-
-local sceneTable1 = {}
 
 -- SET UP SAVED FILE FOR OUR USER
 
@@ -70,6 +67,7 @@ if(user == nil ) then
 end
 
 
+composer.gotoScene( "scene_menu", {effect = "fade", time = 500})
 
 
 --Augustino, December 22, 2016
@@ -101,7 +99,3 @@ local function onSystemEvent( event )
   end
   
   Runtime:addEventListener( "system", onSystemEvent )
-
-
-
-----------------------------------------------------------------------------------------------------------------------------

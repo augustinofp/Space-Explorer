@@ -1,10 +1,11 @@
 local composer = require( "composer" )
 local loadsave = require("loadsave")
 local planet = require("Planet_class")
-local system = require("Solar_system_class")
-local master = require("master_storage")
+local system = require("solar_sys_class")
+local data = require("data_storage")
 local widget = require ("widget")
 local physics = require ("physics")
+
 
 
 local scene = composer.newScene()
@@ -14,6 +15,7 @@ widget.setTheme("widget_theme_ios7")
 
 physics.start()
 physics.setGravity(0,0)
+
 
 
 -- -----------------------------------------------------------------------------------
@@ -26,26 +28,33 @@ physics.setGravity(0,0)
 
 --assign local references to the object tables in master storage
 
-local universe = master.get_universe()
-local solar_sys = master.get_sys()
-local stars = master.get_stars()
-local planets = master.get_planets()
+local universe = data.universe
+local solar_sys = data.solar_sys
+local planets = data.planets
+local P_ID = 0
+local sys_ID = 0
+local params = data.params
+
 
 --initialize ID local references
 
-local star_ID = 0
-local P_ID = event.params.P_ID
-local sys_ID = planets[P_ID].get_sysID()
+
+
 
 -- -----------------------------------------------------------------------------------
 -- Scene event functions
 -- -----------------------------------------------------------------------------------
 
 local function goto_solarsystem(event)
-    local options = {effect = "slideLeft", params = {P_ID, sys_ID}}
 
+    P_ID = params.P_ID
+    sys_ID = planets[P_ID]:get_sysID()
+
+    params.sys_ID = sys_ID
+
+    
     if(event.phase == "ended") then 
-        composer.gotoScene("scene_solarsystem", options)
+        composer.gotoScene("scene_solarsystem", "slideLeft")
     end
 
     return true
@@ -55,33 +64,34 @@ local function goto_menu(event)
     
     if(event.phase == "ended") then
         --find a way to save information
-        composer.gotoScene("scene_menu")
+        composer.gotoScene("scene_menu", "slideRight")
     end
 
     return true
 end
 
-
+local button_left
+local button_right
+local background
+local planet
 -- create()
 function scene:create( event )
 
     local sceneGroup = self.view
     -- Code here runs when the scene is first created but has not yet appeared on screen
 
-    local planet = planets[event.params.P_ID]
-    sceneGroup:insert(planet)
+    planet = display.newImageRect( "Images/planet_1.png", 900, 1300 )
+    
+    planet.x = 330 ; planet.y = 600
+    
+
+    
    
-
-    planet.x = display.contentCenterX; planet.y = display.contentCenterY
-    
-
-    
-    planet.isVisible = true
     
 
     
 
-    local button_left = widget.newButton { 
+    button_left = widget.newButton { 
         width = 200,
         height = 70, 
         defaultFile = "images/left_arrow.png",
@@ -89,7 +99,7 @@ function scene:create( event )
         
     }
 
-    local button_right = widget.newButton { 
+    button_right = widget.newButton { 
         width = 200,
         height = 70, 
         defaultFile = "images/right_arrow.png",
@@ -100,16 +110,16 @@ function scene:create( event )
     sceneGroup:insert(button_left)
     sceneGroup:insert(button_right)
 
-    button_left.x = display.contentCenterX; button_left.y = display.contentCenterY
-
-    button_left.isVisible = true
-    button_right.x = display.contentCenterX; button_right.y = display.contentCenterY
-
-    button_right.isVisible = true
+    button_left.x = display.contentCenterX - 200; button_left.y = display.contentCenterY - 400
 
     
-    button_left:addEventListener("touch", goto_solarsystem())
-    button_right:addEventListener("touch", goto_menu())
+    button_right.x = display.contentCenterX + 200; button_right.y = display.contentCenterY - 400
+
+
+
+    
+    button_left:addEventListener("touch", goto_solarsystem)
+    button_right:addEventListener("touch", goto_menu)
 
 
 
@@ -118,7 +128,7 @@ function scene:create( event )
 
     display.setDefault("textureWrapX", "mirroredRepeat")
 
-    local background = display.newRect(display.contentCenterX, display.contentCenterY, 2220, 1380)
+    background = display.newRect(display.contentCenterX, display.contentCenterY, 2220, 1380)
     background.fill = {type = "image", filename = "images/background.png" }
     background:toBack()
 
@@ -156,9 +166,17 @@ function scene:hide( event )
     local phase = event.phase
 
     if ( phase == "will" ) then
+
+
         -- Code here runs when the scene is on screen (but is about to go off screen)
 
     elseif ( phase == "did" ) then
+
+          button_left:removeSelf( )
+        button_right:removeSelf( )
+        background:removeSelf( )
+        planet:removeSelf( )
+       
         -- Code here runs immediately after the scene goes entirely off screen
 
     end
@@ -169,6 +187,7 @@ end
 function scene:destroy( event )
 
     local sceneGroup = self.view
+
     -- Code here runs prior to the removal of scene's view
 
 end
