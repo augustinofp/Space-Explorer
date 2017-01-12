@@ -7,6 +7,11 @@ local widget = require "widget"
 widget.setTheme("widget_theme_ios7")
 
 
+
+local planets = data.planets
+local params = data.params
+local stars = data.stars
+local solar_sys = data.solar_sys
 -- -----------------------------------------------------------------------------------
 -- Code outside of the scene event functions below will only be executed ONCE unless
 -- the scene is removed entirely (not recycled) via "composer.removeScene()"
@@ -15,21 +20,17 @@ widget.setTheme("widget_theme_ios7")
 -- local forward references should go here
 
 local scene = composer.newScene()
-local btn_play, btn_upgrades, btn_sounds, btn_howtoplay
-local P_ID = 0
+composer.removeHidden()
 
-local planets = data.planets
-local params = data.params
-local stars = data.stars
-local solar_sys = data.solar_sys
+-- if params.P_ID ~= 0 then
+--     composer.removeScene("scene_planet")
+-- end
+-- params.menu = 1
 
---CREATE NECESSARY PLANET, STAR, AND SOLAR SYSTEM OBJECTS
-for i = 1,4 do
-    planets[i] = planet.new("Images/planet_1.png",i,1,"Images/planet_1_ss.png")
-end
+--local P_ID = 0
 
-solar_sys[1] = solar.new(4, 1)
-data.stars[1] = star.new("Images/sun1.png", 1)
+
+
 --data.params[1] = stars[1]
 --if continue button pressed
     --flag = 1
@@ -45,8 +46,9 @@ data.stars[1] = star.new("Images/sun1.png", 1)
 
 function onPlayTouch(event)
     if(event.phase == "ended") then 
-        P_ID = 1
-        params.P_ID = P_ID
+        params.P_ID = 1
+        params.star_ID = 0
+        params.sys_ID = 0
         
         composer.gotoScene("scene_planet", "fade")
     end
@@ -59,22 +61,22 @@ end
 --     end
 -- end
 
-function onSoundsTouch(event)
-    if(event.phase == "ended") then 
-        if(user.playsound == true) then 
-            -- mute the game
-            audio.setVolume(0)
-            btn_sounds.alpha = 0.5
-            user.playsound = false
-        else
-            -- unmute the game
-            audio.setVolume(1)
-            btn_sounds.alpha = 1
-            user.playsound = true
-        end
-        loadsave.saveTable(user, "user.json")
-    end
-end
+-- function onSoundsTouch(event)
+--     if(event.phase == "ended") then 
+--         if(user.playsound == true) then 
+--             -- mute the game
+--             audio.setVolume(0)
+--             btn_sounds.alpha = 0.5
+--             user.playsound = false
+--         else
+--             -- unmute the game
+--             audio.setVolume(1)
+--             btn_sounds.alpha = 1
+--             user.playsound = true
+--         end
+--         --loadsave.saveTable(user, "user.json")
+--     end
+-- end
 
 
 -- -----------------------------------------------------------------------------------
@@ -98,8 +100,8 @@ function scene:create( event )
     --Game Title
     menuTitle = display.newText(sceneGroup, "Space Explorer", 0, 0, "SF Automaton", 70)
     menuTitle.x = 320; menuTitle.y = 200
-
-    planet_menu = display.newImageRect(sceneGroup, "images/planet_1.png", 896, 1344)
+ 
+    planet_menu = display.newImageRect(sceneGroup, data.planets[1]:get_image(), 500, 500)
     planet_menu.x = 330; planet_menu.y = 550;
     transition.to( planet_menu, { rotation=-365, time=65000, iterations =0 } )
 
@@ -111,6 +113,7 @@ function scene:create( event )
         defaultFile = "images/play.png",
         
     }
+
     btn_play.x = 335
     btn_play.y = 500
     sceneGroup:insert(btn_play)
@@ -150,33 +153,33 @@ function scene:create( event )
     btn_sounds.y = 100
     sceneGroup:insert(btn_sounds)
 
-    btn_sounds:addEventListener("touch", onSoundsTouch)
+    --btn_sounds:addEventListener("touch", onSoundsTouch)
 
     -- TRANSITIONS
 
-    -- function asteroidAnimation1()
-    --     asteroid1 = display.newImage(sceneGroup, "images/asteroid.png")
-    --     asteroid1.x = math.random(-10, 0 ); asteroid1.y = math.random(0, 900);
-    --     transition.to (asteroid1, {time = 4000, x = math.random(900, 910), y = math.random(0, 900), onComplete = asteroidAnimation2})
-    --     transition.to( asteroid1, { rotation=365, time=5000, iterations =0 } )
-    --     display.remove(asteroid2)
-    -- end
-    -- asteroidAnimation1()
+    function asteroidAnimation1()
+        asteroid1 = display.newImage(sceneGroup, "images/asteroid.png")
+        asteroid1.x = math.random(-10, 0 ); asteroid1.y = math.random(0, 900);
+        transition.to (asteroid1, {time = 4000, x = math.random(900, 910), y = math.random(0, 900), onComplete = asteroidAnimation2})
+        transition.to( asteroid1, { rotation=365, time=5000, iterations =0 } )
+        display.remove(asteroid2)
+    end
+    asteroidAnimation1()
 
-    -- function asteroidAnimation2()
-    --     asteroid2 = display.newImage(sceneGroup, "images/asteroid.png")
-    --     asteroid2.x = math.random(700, 710); asteroid2.y = math.random(0, 900);
-    --     transition.to (asteroid2, {time = 4000, x = math.random(-10, 0), y = math.random(0, 900), onComplete = asteroidAnimation1})
-    --     transition.to( asteroid2, { rotation=-365, time=5000, iterations =0 } )
-    --     display.remove(asteroid1)
-    -- end
-    -- asteroidAnimation2() 
+    function asteroidAnimation2()
+        asteroid2 = display.newImage(sceneGroup, "images/asteroid.png")
+        asteroid2.x = math.random(700, 710); asteroid2.y = math.random(0, 900);
+        transition.to (asteroid2, {time = 4000, x = math.random(-10, 0), y = math.random(0, 900), onComplete = asteroidAnimation1})
+        transition.to( asteroid2, { rotation=-365, time=5000, iterations =0 } )
+        display.remove(asteroid1)
+    end
+    asteroidAnimation2() 
 
-    -- Background Transition
+    --Background Transition
 
     display.setDefault("textureWrapX", "mirroredRepeat")
 
-    background = display.newRect(display.contentCenterX, display.contentCenterY, 2220, 1380)
+    background = display.newRect(sceneGroup, display.contentCenterX, display.contentCenterY, 2220, 1380)
     background.fill = {type = "image", filename = "images/background.png" }
     background:toBack()
 
@@ -217,13 +220,7 @@ function scene:hide( event )
         -- Code here runs when the scene is on screen (but is about to go off screen)
 
     elseif ( phase == "did" ) then
-        menuTitle:removeSelf( )
-        planet_menu:removeSelf( )
-        btn_play:removeSelf( )
-        btn_sounds:removeSelf( )
-        -- asteroid1:removeSelf( )
-        -- asteroid2:removeSelf( )
-        background:removeSelf( )   
+         
         -- Code here runs immediately after the scene goes entirely off screen
 
     end

@@ -1,14 +1,33 @@
 local composer = require( "composer" )
 local loadsave = require("loadsave")
 local planet = require("Planet_class")
-local system = require("solar_sys_class")
+local solar = require("solar_sys_class")
 local data = require("data_storage")
 local widget = require ("widget")
 local physics = require ("physics")
-
+local star = require("star_class")
 
 
 local scene = composer.newScene()
+composer.removeHidden()
+
+local universe = data.universe
+local solar_sys = data.solar_sys
+local planets = data.planets
+local P_ID = 0
+local sys_ID = 0
+local params = data.params
+local stars = data.stars
+
+
+-- if params.menu == 1 then
+--     composer.removeScene("scene_menu")
+--     params.menu = 0
+-- end
+
+-- if params.sys_ID ~= 0 then
+--     composer.removeScene("solar_system")
+-- end
 
 widget.setTheme("widget_theme_ios7")
 
@@ -28,12 +47,6 @@ physics.setGravity(0,0)
 
 --assign local references to the object tables in master storage
 
-local universe = data.universe
-local solar_sys = data.solar_sys
-local planets = data.planets
-local P_ID = 0
-local sys_ID = 0
-local params = data.params
 
 
 --initialize ID local references
@@ -45,50 +58,51 @@ local params = data.params
 -- Scene event functions
 -- -----------------------------------------------------------------------------------
 
-local function goto_solarsystem(event)
+function goto_solarsystem(event)
 
-    P_ID = params.P_ID
-    sys_ID = planets[P_ID]:get_sysID()
+    --update params table
+   
+    params.sys_ID = data.planets[params.P_ID]:get_sysID()
+    params.star_ID = data.planets[params.P_ID]:get_sysID()
 
-    params.sys_ID = sys_ID
+    
 
     
     if(event.phase == "ended") then 
+        
         composer.gotoScene("scene_solarsystem", "slideLeft")
     end
 
     return true
 end
 
-local function goto_menu(event)
+function goto_menu(event)
     
     if(event.phase == "ended") then
         --find a way to save information
-        composer.gotoScene("scene_menu", "slideRight")
+        
+        composer.gotoScene("scene_menu", "fade")
+
     end
 
     return true
 end
 
+--CREATE LOCAL REFERENCES TO SCENE DISPLAY OBJECTS
 local button_left
 local button_right
 local background
-local planet
+local current_planet
 -- create()
 function scene:create( event )
 
     local sceneGroup = self.view
     -- Code here runs when the scene is first created but has not yet appeared on screen
-
-    planet = display.newImageRect( "Images/planet_1.png", 900, 1300 )
+    print(params.P_ID)
+    current_planet = display.newImageRect( sceneGroup,data.planets[params.P_ID]:get_image(), 600, 600 )
     
-    planet.x = 330 ; planet.y = 600
-    
-
-    
-   
-    
-
+    current_planet.x = 330 ; current_planet.y = 550
+    transition.to( current_planet, { rotation=-365, time=65000, iterations =0 } )
     
 
     button_left = widget.newButton { 
@@ -128,7 +142,7 @@ function scene:create( event )
 
     display.setDefault("textureWrapX", "mirroredRepeat")
 
-    background = display.newRect(display.contentCenterX, display.contentCenterY, 2220, 1380)
+    background = display.newRect(sceneGroup, display.contentCenterX, display.contentCenterY, 2220, 1380)
     background.fill = {type = "image", filename = "images/background.png" }
     background:toBack()
 
@@ -172,11 +186,7 @@ function scene:hide( event )
 
     elseif ( phase == "did" ) then
 
-          button_left:removeSelf( )
-        button_right:removeSelf( )
-        background:removeSelf( )
-        planet:removeSelf( )
-       
+        
         -- Code here runs immediately after the scene goes entirely off screen
 
     end

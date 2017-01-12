@@ -3,10 +3,14 @@ local planet = require("planet_class")
 local star = require("star_class")
 local data = require("data_storage")
 local composer = require( "composer" )
+
 local scene = composer.newScene()
-local widget = require "widget"
+
+
+
+local widget = require ("widget")
 widget.setTheme("widget_theme_ios7")
-local physics = require "physics"
+local physics = require ("physics")
 physics.start()
 physics.setGravity(0,0)
 
@@ -24,6 +28,12 @@ local solar_sys = data.solar_sys
 local stars = data.stars
 local planets = data.planets
 local params = data.params
+composer.removeHidden()
+
+-- if params.P_ID ~= 0 then
+--     composer.removeScene( "scene_planet")
+-- end
+
 
 --initialize ID local references
 local sys_ID = 0
@@ -39,12 +49,40 @@ local count = 1
 -- -----------------------------------------------------------------------------------
 
 function goto_planet(event)
-    params.P_ID = {P_ID[event.target.param]}
+    params.P_ID = event.target.param
+
     if(event.phase == "ended") then 
-        composer.gotoScene("scene_planet", options)
+        
+        composer.gotoScene("scene_planet", "fade")
     end
     return true
 end
+
+
+
+-- function create_rotation( planet, sun, angle)
+--     --Math functions
+--     -- local Cos = math.cos
+--     -- local Sin = math.sin
+--     -- local Rad = math.rad
+--     -- local Atan2 = math.atan2
+--     -- local Deg = math.deg
+--     -- local dot_x = cx
+--     -- local dot_y = cy
+--     local angle = angle * math.pi/180 --convert to radians
+--     local rotated_x = math.cos(angle)*(planet.x - sun.x) - math.sin(angle)*(planet.y - sun.y) + sun.x
+--     local rotated_y = math.sin(angle)*(planet.y - sun.y) + math.cos(angle)*(planet.y - sun.y) + sun.y 
+
+--     planet.x = dot_x  + Cos(Rad(angle)) * radius 
+--     planet.y = dot_y  + Sin(Rad(angle)) * radius
+    
+--     local angleBetween = Atan2(dot_y-planet.y, dot_x-planet.x)
+   
+--     transition.to( planet, { rotation=-365, time=65000, iterations =0 } )  
+     
+--     return true 
+-- end
+
 
 --DEFINE LOCAL REFERENCED TO DISPLAY OBJECTS
 local background
@@ -59,15 +97,15 @@ function scene:create( event )
     -- view here runs when the scene is first created but has not yet appeared on screen
 
     --assign appropriate system, and star ID
-    sys_ID = planets[params.P_ID]:get_sysID()
+    sys_ID = data.planets[params.P_ID]:get_sysID()
     
-   
+   --data.stars[params.star_ID]:get_image()
 
     display.setDefault( "isAnchorClamped", false )
     
     --Display the Appropriate star image/button
-    local sun_image = stars[1]:get_image()
-    sun = display.newImageRect(sceneGroup, "Images/sun1.png", 100, 100)
+    
+    sun = display.newImageRect(sceneGroup,data.stars[params.star_ID]:get_image(), 100, 100)
     sun.x =  display.contentCenterX ; sun.y = display.contentCenterY;
 
     circle = display.newCircle (sceneGroup, 100,100,200)
@@ -90,12 +128,13 @@ function scene:create( event )
     
 
     --returns integer representing starting index of corresponding planets to current solar system
-    max = solar_sys[sys_ID]:get_pnum()
-    local start = solar_sys[sys_ID]:get_start()
+    max = data.solar_sys[sys_ID]:get_pnum()
+    local start = data.solar_sys[sys_ID]:get_start()
     local stop = start + max - 1
 
     --for each planet in the current solar system: create a ring, and a corresponding revolving planet image/button
     for i = start,stop do
+        --local im
         P_ID[count] = i
         --create rings
         rings[count] = display.newImageRect(sceneGroup, "Images/solar_ring.png", ring_x, ring_y)
@@ -104,39 +143,53 @@ function scene:create( event )
         solar_ring.x = display.contentCenterX; solar_ring.y = display.contentCenterY
         
 
-    
+        -- if flag == 0 then
+        --     im = "Images/rainbow_planet_ss"
+
+        -- elseif flag == 1 then
+        --     im = "Images/blue_planet_ss"
+
+        -- elseif flag == 2 then
+        --     im = "Images/gold_planet_ss"
+
+        -- else 
+        --     im = "Images/dark_planet_ss"
         --create  planet images
         planet_ss[count] = widget.newButton{
-            defaultFile = planets[i]:get_ssimage()
+            defaultFile = data.planets[i]:get_ssimage()
         }
 
         sceneGroup:insert(planet_ss[count])
-        planet_ss.anchorX = anchor
+        planet_ss[count].anchorX = anchor
 
         --these conditional statements used to limit range of speed of planet revolution
         if anchor >= -2.0 then
             anchor = -6.0
 
         else
-            anchor = anchor - 2
+            anchor = anchor - 1
         end
 
         --display revolving planet images, on the event that a planet button is touched, 
         --call the appropriate planet even handler
 
+        --local radius = ring_x/2
+        --create_rotation(planet_ss[count], radius,display.contentCenterX, display.contentCenterY)
         planet_ss[count].x = display.contentCenterX + distance_x; planet_ss[count].y = display.contentCenterY + distance_y
+        --create_rotation(planet_ss[count], radius,display.contentCenterX, display.contentCenterY)
         transition.to( planet_ss[count], { time=40000, rotation=-360, iterations=0 } ) 
 
             
         planet_ss[count]:addEventListener("touch", goto_planet)
-        planet_ss[count].param = count 
-
-        --INCREMENT NECESSARY VALUES
+        planet_ss[count].param = i 
+        print(planet_ss[count].param, "\n")
+        --INCREMENT NECESSARY VALUES 
         ring_x = ring_x + 100
         ring_y = ring_x
         distance_x = distance_x + 30
         distance_y = distance_y + 30
         count = count + 1
+        --flag = flag + 1
         
     end 
 
@@ -147,7 +200,7 @@ function scene:create( event )
 
     display.setDefault("textureWrapX", "mirroredRepeat")
 
-    background = display.newRect(display.contentCenterX, display.contentCenterY, 2220, 1380)
+    background = display.newRect(sceneGroup, display.contentCenterX, display.contentCenterY, 2220, 1380)
     background.fill = {type = "image", filename = "images/background.png" }
     background:toBack()
 
@@ -211,4 +264,6 @@ scene:addEventListener( "destroy", scene )
 -- -----------------------------------------------------------------------------------
 
 return scene
+
+
 
