@@ -39,7 +39,7 @@ local sys_ID = 0
 local P_ID = {}
 local rings = {}
 local planet_ss = {}
-local count = 1
+
 
  
 -- -----------------------------------------------------------------------------------
@@ -53,6 +53,22 @@ function goto_planet(event)
         composer.removeHidden()
         composer.gotoScene("scene_planet", "fade")
     end
+    return true
+end
+
+function goto_solarsystem(event)
+
+    --update params table
+   
+    params.sys_ID = param.sys_ID + 1
+    params.star_ID = params.star_ID + 1
+
+    
+    if(event.phase == "ended") then 
+        composer.removeHidden()
+        composer.gotoScene("scene_solarsystem", "fade")
+    end
+
     return true
 end
 
@@ -123,10 +139,10 @@ function scene:create( event )
 
     local ring_x = 200
     local ring_y = 200
-    local anchor = -6.0
+    local anchor = -4.0
     local distance_x = 50
     local distance_y = 50
-   
+    local count = 1
     
     
 
@@ -138,7 +154,7 @@ function scene:create( event )
     --for each planet in the current solar system: create a ring, and a corresponding revolving planet image/button
     for i = start,stop do
      
-     
+
         P_ID[count] = i
 
         --create rings
@@ -162,13 +178,13 @@ function scene:create( event )
             anchor = -6.0
 
         else
-            anchor = anchor - 1
+            anchor = anchor + 1
         end
 
         --display revolving planet images, on the event that a planet button is touched, 
         --call the appropriate planet even handler
 
-        local radius = ring_x/2
+        --local radius = ring_x/2
         --create_rotation(planet_ss[count], radius,display.contentCenterX, display.contentCenterY)
         planet_ss[count].x = display.contentCenterX + distance_x; planet_ss[count].y = display.contentCenterY + distance_y
         --create_rotation(planet_ss[count], radius,display.contentCenterX, display.contentCenterY)

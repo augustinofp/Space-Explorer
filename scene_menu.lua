@@ -101,7 +101,7 @@ function scene:create( event )
     menuTitle = display.newText(sceneGroup, "Space Explorer", 0, 0, "SF Automaton", 70)
     menuTitle.x = 320; menuTitle.y = 200
  
-    planet_menu = display.newImageRect(sceneGroup, data.planets[1]:get_image(), 500, 500)
+    planet_menu = display.newImageRect(sceneGroup, "Images/earth.png", 500, 500)
     planet_menu.x = 330; planet_menu.y = 550;
     transition.to( planet_menu, { rotation=-365, time=65000, iterations =0 } )
 
@@ -164,6 +164,7 @@ function scene:create( event )
         transition.to( asteroid1, { rotation=365, time=5000, iterations =0 } )
         display.remove(asteroid2)
     end
+
     asteroidAnimation1()
 
     function asteroidAnimation2()
@@ -173,6 +174,7 @@ function scene:create( event )
         transition.to( asteroid2, { rotation=-365, time=5000, iterations =0 } )
         display.remove(asteroid1)
     end
+    
     asteroidAnimation2() 
 
     --Background Transition

@@ -4,6 +4,7 @@ local data = require("data_storage")
 local planet = require("planet_class")
 local star = require("star_class")
 local solar = require("solar_sys_class")
+local pload = require("load_planet")
 
 --Initialize master data file
 data.planets = {}
@@ -19,7 +20,12 @@ data.params = {}
 data.params.P_ID = 0
 data.params.sys_ID = 0
 data.params.star_ID = 0
-data.params.menu = 0
+data.params.planet_mark = 1
+data.params.system_mark = 1
+data.params.star_mark = 1
+data.params.galaxy_mark = 1
+data.params.universe_mark = 1
+
 
 -- APP OPTIONS 
 
@@ -74,19 +80,74 @@ display.setStatusBar(display.HiddenStatusBar)
 -- 	loadsave.saveTable(user, "user.json")
 -- end
 
+------------------------------------------------------------------------------------------------------
+--TEST PLAN: when game is launched, make a read call to the data file, if this file is empty, then we initiliaze the marks
+
+
+-- local path = system.pathForFile( "data.txt", system.DocumentsDirectory )
+  
+-- -- io.open opens a file at path. returns nil if no file found
+-- local fh, reason = io.open( path, "r" )
+  
+-- if fh then
+--     -- read all contents of file into a string
+--     local contents = fh:read( "*a" )
+--     print( "Contents of " .. path .. "\n" .. contents )
+
+-- else
+--     print( "Reason open failed: " .. reason )  -- display failure message in terminal
+ 
+--     -- create file because it doesn't exist yet
+--     fh = io.open( path, "w" )
+ 
+--     if fh then
+--         print( "Created file" )
+--     else
+--         print( "Create file failed!" )
+--     end
+ 
+--     local numbers = {1,2,3,4,5,6,7,8,9}
+--     fh:write( "Feed me data!\n", numbers[1], numbers[2], "\n" )
+ 
+--     for _,v in ipairs( numbers ) do
+--         fh:write( v, " " )
+--     end
+ 
+--     fh:write( "\nNo more data\n" )
+-- end
+  
+-- io.close( fh )
+
+
+
+
+
+
+
+
+
+
+
 
 --CREATE NECESSARY PLANET, STAR, AND SOLAR SYSTEM OBJECTS
-data.planets[1] = planet.new("Images/rainbow_planet.png",1,1,"Images/rainbow_planet_ss.png")
+pload.load(1,1)
+pload.load(2,1)
+pload.load(3,1)
+pload.load(4,1)
+pload.load(5,1)
+pload.load(1,1)
+pload.load(2,1)
+pload.load(3,1)
+pload.load(4,1)
+pload.load(5,1)
+pload.load(6,1)
 
-data.planets[2] = planet.new("Images/blue_planet.png",2,1,"Images/blue_planet_ss.png")
-data.planets[3] = planet.new("Images/gold_planet.png",3,1,"Images/gold_planet_ss.png")
-data.planets[4] = planet.new("Images/dark_planet.png",4,1,"Images/dark_planet_ss.png")
 
+data.solar_sys[1] = solar.new(5, 1)
+data.solar_sys[2] = solar.new(6, 6)
 
-
-data.solar_sys[1] = solar.new(4, 1)
 data.stars[1] = star.new("Images/sun.png", 1)
-
+data.stars[2] = star.new("Images/sun.png", 2)
 
 composer.gotoScene( "scene_menu", {effect = "fade", time = 500})
 

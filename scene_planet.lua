@@ -90,8 +90,8 @@ function scene:create( event )
 
     local sceneGroup = self.view
     -- Code here runs when the scene is first created but has not yet appeared on screen
-    print(params.P_ID)
-    current_planet = display.newImageRect( sceneGroup,data.planets[params.P_ID]:get_image(), 600, 600 )
+    --print(params.P_ID)
+    current_planet = display.newImageRect( sceneGroup,data.planets[params.P_ID]:get_image(), 500, 500 )
     
     current_planet.x = 330 ; current_planet.y = 550
     transition.to( current_planet, { rotation=-365, time=65000, iterations =0 } )
