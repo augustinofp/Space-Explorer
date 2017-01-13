@@ -56,17 +56,17 @@ function goto_planet(event)
     return true
 end
 
-function goto_solarsystem(event)
+function goto_galaxy(event)
 
     --update params table
    
-    params.sys_ID = param.sys_ID + 1
-    params.star_ID = params.star_ID + 1
+    params.gal_ID = 1
+    
 
     
     if(event.phase == "ended") then 
         composer.removeHidden()
-        composer.gotoScene("scene_solarsystem", "fade")
+        composer.gotoScene("scene_galaxy", "slideLeft")
     end
 
     return true
@@ -74,40 +74,12 @@ end
 
 
 
-
-
---Math functions
-    -- local Cos = math.cos
-    -- local Sin = math.sin
-    -- local Rad = math.rad
-    -- local Atan2 = math.atan2
-    -- local Deg = math.deg
-    -- local dot_x = cx
-    -- local dot_y = cy
-
-
--- function create_rotation( planet, sun, angle)
- 
---     local angle = angle * math.pi/180 --convert to radians
---     local rotated_x = math.cos(angle)*(planet.x - sun.x) - math.sin(angle)*(planet.y - sun.y) + sun.x
---     local rotated_y = math.sin(angle)*(planet.y - sun.y) + math.cos(angle)*(planet.y - sun.y) + sun.y 
-
---     planet.x = dot_x  + Cos(Rad(angle)) * radius 
---     planet.y = dot_y  + Sin(Rad(angle)) * radius
-    
---     local angleBetween = Atan2(dot_y-planet.y, dot_x-planet.x)
-   
---     transition.to( planet, { rotation=-365, time=65000, iterations =0 } )  
-     
---     return true 
--- end
-
-
 --DEFINE LOCAL REFERENCED TO DISPLAY OBJECTS
 local background
 local sun
 local circle
 local solar_ring
+local button_left
 
 -- create()
 function scene:create( event )
@@ -132,6 +104,8 @@ function scene:create( event )
     circle.strokeWidth = 3 --This is the width of the outline of the circle
     circle.x = display.contentCenterX; circle.y = display.contentCenterY
     circle:setStrokeColor(1,1,1) --This is the color of the outline
+
+
 
 
     --assign the max value off for loop to be the total number of planets in the current solar system
@@ -206,7 +180,19 @@ function scene:create( event )
     end 
 
 
+     button_left = widget.newButton { 
+        width = 200,
+        height = 70, 
+        defaultFile = "images/left_arrow.png",
+        overFile = "images/left_arrow_overfile.png",
+        
+    }
 
+    sceneGroup:insert(button_left)
+
+    button_left.x = display.contentCenterX - 200; button_left.y = display.contentCenterY - 400
+
+    button_left:addEventListener("touch", goto_galaxy)
 
     -- Background Transition
 

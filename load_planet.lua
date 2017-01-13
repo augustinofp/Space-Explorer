@@ -9,7 +9,8 @@ local load_planet = {}
 --atmosphere
 
 
-
+math.randomseed( os.time() )
+math.random(); math.random(); math.random()
 
 --INITAL TESTING CODE, NOT FINALIZED
 
@@ -17,6 +18,7 @@ function load_planet.load(P_ID, sys_ID)
 
 
 	local key = math.random(10)
+	print(key)
 
 	load_planet.images  = {"Images/blue_planet.png", "Images/dark_planet.png",
 	 "Images/gold_planet.png", "Images/rainbow_planet.png" , 

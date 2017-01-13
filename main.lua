@@ -5,6 +5,7 @@ local planet = require("planet_class")
 local star = require("star_class")
 local solar = require("solar_sys_class")
 local pload = require("load_planet")
+local galaxy = require("galaxy_class")
 
 --Initialize master data file
 data.planets = {}
@@ -20,6 +21,7 @@ data.params = {}
 data.params.P_ID = 0
 data.params.sys_ID = 0
 data.params.star_ID = 0
+data.params.gal_ID = 0
 data.params.planet_mark = 1
 data.params.system_mark = 1
 data.params.star_mark = 1
@@ -51,10 +53,10 @@ display.setStatusBar(display.HiddenStatusBar)
 
 -- INCLUDE LOAD/ SAVE LIBRARY FROM CORONAROB 
 
---loadsave = require("loadsave")
+-- local loadsave = require("loadsave")
 
 
--- LOAD UP SOME AUDIO
+-- --LOAD UP SOME AUDIO
 
 -- local soundTable = {
 
@@ -66,7 +68,7 @@ display.setStatusBar(display.HiddenStatusBar)
 
 -- audio.play( soundTable["chimeSound"] )
 
--- SET UP SAVED FILE FOR OUR USER
+-- -- SET UP SAVED FILE FOR OUR USER
 
 -- user = loadsave.loadTable("user.json")
 -- if(user == nil ) then 
@@ -121,14 +123,6 @@ display.setStatusBar(display.HiddenStatusBar)
 
 
 
-
-
-
-
-
-
-
-
 --CREATE NECESSARY PLANET, STAR, AND SOLAR SYSTEM OBJECTS
 pload.load(1,1)
 pload.load(2,1)
@@ -146,8 +140,10 @@ pload.load(6,1)
 data.solar_sys[1] = solar.new(5, 1)
 data.solar_sys[2] = solar.new(6, 6)
 
-data.stars[1] = star.new("Images/sun.png", 1)
-data.stars[2] = star.new("Images/sun.png", 2)
+data.stars[1] = star.new("Images/sun.png", 1, "Images/sun_ss.png")
+data.stars[2] = star.new("Images/sun1.png", 2, "Images/sun1_ss.png")
+
+data.galaxy[1] = galaxy.new("Images/galaxy.png", 2, 1)
 
 composer.gotoScene( "scene_menu", {effect = "fade", time = 500})
 

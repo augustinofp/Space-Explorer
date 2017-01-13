@@ -5,6 +5,7 @@ local solar = require("solar_sys_class")
 local star = require("star_class")
 local widget = require "widget"
 widget.setTheme("widget_theme_ios7")
+local loadsave = require("loadsave")
 
 
 
@@ -61,22 +62,22 @@ end
 --     end
 -- end
 
-function onSoundsTouch(event)
-    if(event.phase == "ended") then 
-        if(user.playsound == true) then 
-            -- mute the game
-            audio.setVolume(0)
-            btn_sounds.alpha = 0.5
-            user.playsound = false
-        else
-            -- unmute the game
-            audio.setVolume(1)
-            btn_sounds.alpha = 1
-            user.playsound = true
-        end
-        --loadsave.saveTable(user, "user.json")
-    end
-end
+-- function onSoundsTouch(event)
+--     if(event.phase == "ended") then 
+--         if(user.playsound == true) then 
+--             -- mute the game
+--             audio.setVolume(0)
+--             btn_sounds.alpha = 0.5
+--             user.playsound = false
+--         else
+--             -- unmute the game
+--             audio.setVolume(1)
+--             btn_sounds.alpha = 1
+--             user.playsound = true
+--         end
+--         loadsave.saveTable(user, "user.json")
+--     end
+-- end
 
 
 -- -----------------------------------------------------------------------------------
@@ -88,10 +89,25 @@ local menuTitle
 local planet_menu
 local btn_play
 local btn_sounds
-local asteroid1
-local asteroid2
+-- local asteroid1
+-- local asteroid2
 local background
+
+
+
+--  local asteroid
+--  local asteroidX
+-- local asteroidY
+-- -- local xLeft
+-- -- local yUp
+-- -- local xRight
+-- -- local yDown
+-- local i = 0
+-- local j = 0
 -- create()
+
+
+
 function scene:create( event )
 
     local sceneGroup = self.view
@@ -142,47 +158,38 @@ function scene:create( event )
     -- btn_howtoplay.y = 580
     -- sceneGroup:insert(btn_howtoplay)
 
-    btn_sounds = widget.newButton {
-    width = 200,
-    height = 70,
-    defaultFile = "images/btn_sounds.png",
-    overFile = "images/btn_soundoff.png",
+    -- btn_sounds = widget.newButton {
+    -- width = 200,
+    -- height = 70,
+    -- defaultFile = "images/btn_sounds.png",
+    -- overFile = "images/btn_soundoff.png",
     
-    }
-    btn_sounds.x = 100
-    btn_sounds.y = 100
-    sceneGroup:insert(btn_sounds)
+    -- }
+    -- btn_sounds.x = 100
+    -- btn_sounds.y = 100
+    -- sceneGroup:insert(btn_sounds)
 
-    btn_sounds:addEventListener("touch", onSoundsTouch)
+    -- btn_sounds:addEventListener("touch", onSoundsTouch)
 
-    -- TRANSITIONS
 
-    function asteroidAnimation1()
-        asteroid1 = display.newImage(sceneGroup, "images/asteroid.png")
-        asteroid1.x = math.random(-10, 0 ); asteroid1.y = math.random(0, 900);
-        transition.to (asteroid1, {time = 4000, x = math.random(900, 910), y = math.random(0, 900), onComplete = asteroidAnimation2})
-        transition.to( asteroid1, { rotation=365, time=5000, iterations =0 } )
-        display.remove(asteroid2)
-    end
+   
 
-    asteroidAnimation1()
+ 
 
-    function asteroidAnimation2()
-        asteroid2 = display.newImage(sceneGroup, "images/asteroid.png")
-        asteroid2.x = math.random(700, 710); asteroid2.y = math.random(0, 900);
-        transition.to (asteroid2, {time = 4000, x = math.random(-10, 0), y = math.random(0, 900), onComplete = asteroidAnimation1})
-        transition.to( asteroid2, { rotation=-365, time=5000, iterations =0 } )
-        display.remove(asteroid1)
-    end
+
+    math.randomseed( os.time() )
+    math.random(); math.random(); math.random()
+
+
+
     
-    asteroidAnimation2() 
 
     --Background Transition
 
     display.setDefault("textureWrapX", "mirroredRepeat")
 
     background = display.newRect(sceneGroup, display.contentCenterX, display.contentCenterY, 2220, 1380)
-    background.fill = {type = "image", filename = "images/background.png" }
+    background.fill = {type = "image", filename = "Images/background.png" }
     background:toBack()
 
     local function animateBackground()

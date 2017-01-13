@@ -72,7 +72,7 @@ function goto_menu(event)
     
     if(event.phase == "ended") then
         --find a way to save information
-        
+        composer.removeHidden()
         composer.gotoScene("scene_menu", "fade")
 
     end

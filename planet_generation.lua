@@ -55,7 +55,7 @@ function createETP(PBase, Mass1, Mass2, Mass3, Mass4, Mass5, Mass6)
 
     local t = {PBase, M1, M2, M3, M4, M5, M6}
     return t
+  
 
-
-end    
+  end
 

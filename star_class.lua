@@ -2,7 +2,7 @@ local Star = {} -- table representing class planet
 
 Star.__index = Star --failed table lookups should fall back to class table to get methods 
 --type, toxicity, age, colours, level, 	
-function Star.new(image, sys_ID)
+function Star.new(image, sys_ID, ssimage)
 	local self = setmetatable({}, Star)
   -- self.type = type
   -- self.toxicity = toxicity
@@ -14,6 +14,7 @@ function Star.new(image, sys_ID)
   -- self.level = level
   self.image = image
   self.sys_ID = sys_ID
+  self.ssimage = ssimage
 
   return self
 
@@ -65,6 +66,14 @@ end
 
 function Star.get_sysID(self)
 	return self.sys_ID
+end
+
+function Star.set_ssimage(self, ssimage)
+  self.ssimage = ssimage
+end
+
+function Star.get_ssimage(self)
+  return self.ssimage
 end
 
 return Star
