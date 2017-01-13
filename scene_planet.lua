@@ -20,14 +20,6 @@ local params = data.params
 local stars = data.stars
 
 
--- if params.menu == 1 then
---     composer.removeScene("scene_menu")
---     params.menu = 0
--- end
-
--- if params.sys_ID ~= 0 then
---     composer.removeScene("solar_system")
--- end
 
 widget.setTheme("widget_theme_ios7")
 
@@ -102,7 +94,7 @@ function scene:create( event )
     current_planet = display.newImageRect( sceneGroup,data.planets[params.P_ID]:get_image(), 600, 600 )
     
     current_planet.x = 330 ; current_planet.y = 550
-    --transition.to( current_planet, { rotation=-365, time=65000, iterations =0 } )
+    transition.to( current_planet, { rotation=-365, time=65000, iterations =0 } )
     
 
     button_left = widget.newButton { 
@@ -146,11 +138,11 @@ function scene:create( event )
     background.fill = {type = "image", filename = "images/background.png" }
     background:toBack()
 
-    -- local function animateBackground()
-    -- transition.to( background.fill, { time=60000, x=1, delta=true, onComplete=animateBackground } )
-    -- end
+    local function animateBackground()
+    transition.to( background.fill, { time=60000, x=1, delta=true, onComplete=animateBackground } )
+    end
 
-    -- animateBackground()
+    animateBackground()
 
 end
 
@@ -180,7 +172,7 @@ function scene:hide( event )
     local phase = event.phase
 
     if ( phase == "will" ) then
-
+            transition.cancel()
 
         -- Code here runs when the scene is on screen (but is about to go off screen)
 

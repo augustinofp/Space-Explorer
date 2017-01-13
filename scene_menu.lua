@@ -61,22 +61,22 @@ end
 --     end
 -- end
 
--- function onSoundsTouch(event)
---     if(event.phase == "ended") then 
---         if(user.playsound == true) then 
---             -- mute the game
---             audio.setVolume(0)
---             btn_sounds.alpha = 0.5
---             user.playsound = false
---         else
---             -- unmute the game
---             audio.setVolume(1)
---             btn_sounds.alpha = 1
---             user.playsound = true
---         end
---         --loadsave.saveTable(user, "user.json")
---     end
--- end
+function onSoundsTouch(event)
+    if(event.phase == "ended") then 
+        if(user.playsound == true) then 
+            -- mute the game
+            audio.setVolume(0)
+            btn_sounds.alpha = 0.5
+            user.playsound = false
+        else
+            -- unmute the game
+            audio.setVolume(1)
+            btn_sounds.alpha = 1
+            user.playsound = true
+        end
+        --loadsave.saveTable(user, "user.json")
+    end
+end
 
 
 -- -----------------------------------------------------------------------------------
@@ -153,41 +153,41 @@ function scene:create( event )
     btn_sounds.y = 100
     sceneGroup:insert(btn_sounds)
 
-    --btn_sounds:addEventListener("touch", onSoundsTouch)
+    btn_sounds:addEventListener("touch", onSoundsTouch)
 
     -- TRANSITIONS
 
-    -- function asteroidAnimation1()
-    --     asteroid1 = display.newImage(sceneGroup, "images/asteroid.png")
-    --     asteroid1.x = math.random(-10, 0 ); asteroid1.y = math.random(0, 900);
-    --     transition.to (asteroid1, {time = 4000, x = math.random(900, 910), y = math.random(0, 900), onComplete = asteroidAnimation2})
-    --     transition.to( asteroid1, { rotation=365, time=5000, iterations =0 } )
-    --     display.remove(asteroid2)
-    -- end
-    -- asteroidAnimation1()
+    function asteroidAnimation1()
+        asteroid1 = display.newImage(sceneGroup, "images/asteroid.png")
+        asteroid1.x = math.random(-10, 0 ); asteroid1.y = math.random(0, 900);
+        transition.to (asteroid1, {time = 4000, x = math.random(900, 910), y = math.random(0, 900), onComplete = asteroidAnimation2})
+        transition.to( asteroid1, { rotation=365, time=5000, iterations =0 } )
+        display.remove(asteroid2)
+    end
+    asteroidAnimation1()
 
-    -- function asteroidAnimation2()
-    --     asteroid2 = display.newImage(sceneGroup, "images/asteroid.png")
-    --     asteroid2.x = math.random(700, 710); asteroid2.y = math.random(0, 900);
-    --     transition.to (asteroid2, {time = 4000, x = math.random(-10, 0), y = math.random(0, 900), onComplete = asteroidAnimation1})
-    --     transition.to( asteroid2, { rotation=-365, time=5000, iterations =0 } )
-    --     display.remove(asteroid1)
-    -- end
-    -- asteroidAnimation2() 
+    function asteroidAnimation2()
+        asteroid2 = display.newImage(sceneGroup, "images/asteroid.png")
+        asteroid2.x = math.random(700, 710); asteroid2.y = math.random(0, 900);
+        transition.to (asteroid2, {time = 4000, x = math.random(-10, 0), y = math.random(0, 900), onComplete = asteroidAnimation1})
+        transition.to( asteroid2, { rotation=-365, time=5000, iterations =0 } )
+        display.remove(asteroid1)
+    end
+    asteroidAnimation2() 
 
-    -- --Background Transition
+    --Background Transition
 
-    -- display.setDefault("textureWrapX", "mirroredRepeat")
+    display.setDefault("textureWrapX", "mirroredRepeat")
 
-    -- background = display.newRect(sceneGroup, display.contentCenterX, display.contentCenterY, 2220, 1380)
-    -- background.fill = {type = "image", filename = "images/background.png" }
-    -- background:toBack()
+    background = display.newRect(sceneGroup, display.contentCenterX, display.contentCenterY, 2220, 1380)
+    background.fill = {type = "image", filename = "images/background.png" }
+    background:toBack()
 
-    -- local function animateBackground()
-    -- transition.to( background.fill, { time=60000, x=1, delta=true, onComplete=animateBackground } )
-    -- end
+    local function animateBackground()
+    transition.to( background.fill, { time=60000, x=1, delta=true, onComplete=animateBackground } )
+    end
 
-    -- animateBackground()
+    animateBackground()
 
 
 end
@@ -216,7 +216,7 @@ function scene:hide( event )
     local phase = event.phase
 
     if ( phase == "will" ) then
-          
+          transition.cancel()
         -- Code here runs when the scene is on screen (but is about to go off screen)
 
     elseif ( phase == "did" ) then
