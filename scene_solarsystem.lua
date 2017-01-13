@@ -28,7 +28,7 @@ local solar_sys = data.solar_sys
 local stars = data.stars
 local planets = data.planets
 local params = data.params
-composer.removeHidden()
+
 
 -- if params.P_ID ~= 0 then
 --     composer.removeScene( "scene_planet")
@@ -52,7 +52,7 @@ function goto_planet(event)
     params.P_ID = event.target.param
 
     if(event.phase == "ended") then 
-        
+        composer.removeHidden()
         composer.gotoScene("scene_planet", "fade")
     end
     return true
@@ -177,7 +177,7 @@ function scene:create( event )
         --create_rotation(planet_ss[count], radius,display.contentCenterX, display.contentCenterY)
         planet_ss[count].x = display.contentCenterX + distance_x; planet_ss[count].y = display.contentCenterY + distance_y
         --create_rotation(planet_ss[count], radius,display.contentCenterX, display.contentCenterY)
-        transition.to( planet_ss[count], { time=40000, rotation=-360, iterations=0 } ) 
+        --transition.to( planet_ss[count], { time=40000, rotation=-360, iterations=0 } ) 
 
             
         planet_ss[count]:addEventListener("touch", goto_planet)
@@ -204,11 +204,11 @@ function scene:create( event )
     background.fill = {type = "image", filename = "images/background.png" }
     background:toBack()
 
-    local function animateBackground()
-    transition.to( background.fill, { time=60000, x=1, delta=true, onComplete=animateBackground } )
-    end
+    -- local function animateBackground()
+    -- transition.to( background.fill, { time=60000, x=1, delta=true, onComplete=animateBackground } )
+    -- end
 
-    animateBackground()
+    -- animateBackground()
 
 end
 

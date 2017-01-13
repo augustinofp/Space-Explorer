@@ -20,7 +20,7 @@ local solar_sys = data.solar_sys
 -- local forward references should go here
 
 local scene = composer.newScene()
-composer.removeHidden()
+
 
 -- if params.P_ID ~= 0 then
 --     composer.removeScene("scene_planet")
@@ -49,7 +49,7 @@ function onPlayTouch(event)
         params.P_ID = 1
         params.star_ID = 0
         params.sys_ID = 0
-        
+        composer.removeHidden( false )
         composer.gotoScene("scene_planet", "fade")
     end
 end
@@ -157,37 +157,37 @@ function scene:create( event )
 
     -- TRANSITIONS
 
-    function asteroidAnimation1()
-        asteroid1 = display.newImage(sceneGroup, "images/asteroid.png")
-        asteroid1.x = math.random(-10, 0 ); asteroid1.y = math.random(0, 900);
-        transition.to (asteroid1, {time = 4000, x = math.random(900, 910), y = math.random(0, 900), onComplete = asteroidAnimation2})
-        transition.to( asteroid1, { rotation=365, time=5000, iterations =0 } )
-        display.remove(asteroid2)
-    end
-    asteroidAnimation1()
+    -- function asteroidAnimation1()
+    --     asteroid1 = display.newImage(sceneGroup, "images/asteroid.png")
+    --     asteroid1.x = math.random(-10, 0 ); asteroid1.y = math.random(0, 900);
+    --     transition.to (asteroid1, {time = 4000, x = math.random(900, 910), y = math.random(0, 900), onComplete = asteroidAnimation2})
+    --     transition.to( asteroid1, { rotation=365, time=5000, iterations =0 } )
+    --     display.remove(asteroid2)
+    -- end
+    -- asteroidAnimation1()
 
-    function asteroidAnimation2()
-        asteroid2 = display.newImage(sceneGroup, "images/asteroid.png")
-        asteroid2.x = math.random(700, 710); asteroid2.y = math.random(0, 900);
-        transition.to (asteroid2, {time = 4000, x = math.random(-10, 0), y = math.random(0, 900), onComplete = asteroidAnimation1})
-        transition.to( asteroid2, { rotation=-365, time=5000, iterations =0 } )
-        display.remove(asteroid1)
-    end
-    asteroidAnimation2() 
+    -- function asteroidAnimation2()
+    --     asteroid2 = display.newImage(sceneGroup, "images/asteroid.png")
+    --     asteroid2.x = math.random(700, 710); asteroid2.y = math.random(0, 900);
+    --     transition.to (asteroid2, {time = 4000, x = math.random(-10, 0), y = math.random(0, 900), onComplete = asteroidAnimation1})
+    --     transition.to( asteroid2, { rotation=-365, time=5000, iterations =0 } )
+    --     display.remove(asteroid1)
+    -- end
+    -- asteroidAnimation2() 
 
-    --Background Transition
+    -- --Background Transition
 
-    display.setDefault("textureWrapX", "mirroredRepeat")
+    -- display.setDefault("textureWrapX", "mirroredRepeat")
 
-    background = display.newRect(sceneGroup, display.contentCenterX, display.contentCenterY, 2220, 1380)
-    background.fill = {type = "image", filename = "images/background.png" }
-    background:toBack()
+    -- background = display.newRect(sceneGroup, display.contentCenterX, display.contentCenterY, 2220, 1380)
+    -- background.fill = {type = "image", filename = "images/background.png" }
+    -- background:toBack()
 
-    local function animateBackground()
-    transition.to( background.fill, { time=60000, x=1, delta=true, onComplete=animateBackground } )
-    end
+    -- local function animateBackground()
+    -- transition.to( background.fill, { time=60000, x=1, delta=true, onComplete=animateBackground } )
+    -- end
 
-    animateBackground()
+    -- animateBackground()
 
 
 end

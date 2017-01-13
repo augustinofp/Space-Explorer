@@ -9,7 +9,7 @@ local star = require("star_class")
 
 
 local scene = composer.newScene()
-composer.removeHidden()
+
 
 local universe = data.universe
 local solar_sys = data.solar_sys
@@ -69,7 +69,7 @@ function goto_solarsystem(event)
 
     
     if(event.phase == "ended") then 
-        
+        composer.removeHidden()
         composer.gotoScene("scene_solarsystem", "slideLeft")
     end
 
@@ -102,7 +102,7 @@ function scene:create( event )
     current_planet = display.newImageRect( sceneGroup,data.planets[params.P_ID]:get_image(), 600, 600 )
     
     current_planet.x = 330 ; current_planet.y = 550
-    transition.to( current_planet, { rotation=-365, time=65000, iterations =0 } )
+    --transition.to( current_planet, { rotation=-365, time=65000, iterations =0 } )
     
 
     button_left = widget.newButton { 
@@ -146,11 +146,11 @@ function scene:create( event )
     background.fill = {type = "image", filename = "images/background.png" }
     background:toBack()
 
-    local function animateBackground()
-    transition.to( background.fill, { time=60000, x=1, delta=true, onComplete=animateBackground } )
-    end
+    -- local function animateBackground()
+    -- transition.to( background.fill, { time=60000, x=1, delta=true, onComplete=animateBackground } )
+    -- end
 
-    animateBackground()
+    -- animateBackground()
 
 end
 
