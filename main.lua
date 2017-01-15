@@ -4,29 +4,34 @@ local data = require("data_storage")
 local planet = require("planet_class")
 local star = require("star_class")
 local solar = require("solar_sys_class")
-local pload = require("load_planet")
+--local pload = require("load_planet")
 local galaxy = require("galaxy_class")
 
 --Initialize master data file
 data.planets = {}
-local planets = data.planets
 data.stars = {}
-local stars = data.stars
 data.solar_sys = {}
-local solar_sys = data.solar_sys
 data.galaxy = {}
 data.universe = {}
 data.multiverse = {}
+
 data.params = {}
+data.init_flag = 0
+
 data.params.P_ID = 0
 data.params.sys_ID = 0
 data.params.star_ID = 0
 data.params.gal_ID = 0
+data.params.uni_ID = 0
+data.params.multi_ID = 1
+
 data.params.planet_mark = 1
 data.params.system_mark = 1
 data.params.star_mark = 1
 data.params.galaxy_mark = 1
 data.params.universe_mark = 1
+data.params.multi_mark = 1
+
 
 
 -- APP OPTIONS 
@@ -123,32 +128,32 @@ display.setStatusBar(display.HiddenStatusBar)
 
 
 
---CREATE NECESSARY PLANET, STAR, AND SOLAR SYSTEM OBJECTS
-pload.load(1,1)
+-- --CREATE NECESSARY PLANET, STAR, AND SOLAR SYSTEM OBJECTS
+-- pload.load(1,1)
 
 
 
-pload.load(2,1)
-pload.load(3,1)
-pload.load(4,1)
-pload.load(5,1)
-pload.load(6,2)
-pload.load(7,2)
-pload.load(8,2)
-pload.load(9,2)
-pload.load(10,2)
-pload.load(11,2)
+-- pload.load(2,1)
+-- pload.load(3,1)
+-- pload.load(4,1)
+-- pload.load(5,1)
+-- pload.load(6,2)
+-- pload.load(7,2)
+-- pload.load(8,2)
+-- pload.load(9,2)
+-- pload.load(10,2)
+-- pload.load(11,2)
 
 
 
 
-data.solar_sys[1] = solar.new(5, 1)
-data.solar_sys[2] = solar.new(6, 6)
+-- data.solar_sys[1] = solar.new(5, 1)
+-- data.solar_sys[2] = solar.new(6, 6)
 
-data.stars[1] = star.new("Images/sun.png", 1, "Images/sun_ss.png")
-data.stars[2] = star.new("Images/sun1.png", 2, "Images/sun1_ss.png")
+-- data.stars[1] = star.new("Images/sun.png", 1, "Images/sun_ss.png")
+-- data.stars[2] = star.new("Images/sun1.png", 2, "Images/sun1_ss.png")
 
-data.galaxy[1] = galaxy.new("Images/galaxy.png", 2, 1)
+-- data.galaxy[1] = galaxy.new("Images/galaxy.png", 2, 1)
 
 composer.gotoScene( "scene_menu", {effect = "fade", time = 500})
 

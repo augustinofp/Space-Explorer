@@ -5,7 +5,7 @@ Planet.__index = Planet --failed table lookups should fall back to class table t
 	
 	--atmos, out_mat, in_mat, toxicity, age, colours, habitation, level, 
 
-function Planet.new(image, P_ID, sys_ID, ss_image)
+function Planet.new(image, P_ID, sys_ID, gal_ID, ss_image)
 	local self = setmetatable({}, Planet)
   -- self.atmos = atmos
   -- self.out_mat = out_mat
@@ -18,6 +18,7 @@ function Planet.new(image, P_ID, sys_ID, ss_image)
   self.image = image
   self.P_ID = P_ID
   self.sys_ID = sys_ID
+  self.gal_ID = gal_ID
   self.ss_image = ss_image
   return self
 end
@@ -109,6 +110,14 @@ end
 
 function Planet.get_sysID(self)
 	return self.sys_ID
+end
+
+function Planet.set_galID(self, gal_ID)
+  self.gal_ID = gal_ID
+end
+
+function Planet.get_galID(self)
+  return self.gal_ID
 end
 
 function Planet.set_ssimage(self, ss_image)

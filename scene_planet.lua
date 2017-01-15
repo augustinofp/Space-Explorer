@@ -6,10 +6,11 @@ local data = require("data_storage")
 local widget = require ("widget")
 local physics = require ("physics")
 local star = require("star_class")
-
+local pload = require("load_planet")
+local sload = require("load_system")
+local stload = require("load_star")
 
 local scene = composer.newScene()
-
 
 local universe = data.universe
 local solar_sys = data.solar_sys
@@ -31,6 +32,7 @@ print("P_ID = ", params.P_ID)
 print("star_ID = ", params.star_ID)
 print("sys_ID = ", params.sys_ID)
 print("gal_ID = ", params.gal_ID)
+print("3. planet mark = ", params.planet_mark)
 
 
 
@@ -57,17 +59,30 @@ print("gal_ID = ", params.gal_ID)
 
 function goto_solarsystem(event)
 
-    --update params table
-   
-    params.sys_ID = data.planets[params.P_ID]:get_sysID()
-    
-    params.star_ID = data.planets[params.P_ID]:get_sysID()
-    
+  
+
+
 
     
+    if(event.phase == "ended") then
+        --update params table
+        params.sys_ID = data.planets[params.P_ID]:get_sysID()
+        params.gal_ID = data.planets[params.P_ID]:get_galID()
 
-    
-    if(event.phase == "ended") then 
+        -- print("4. sys_ID = ", params.sys_ID, "    4. gal_ID = ", params.gal_ID)
+        -- print("4. ", params.sys_ID >= params.system_mark)
+
+        --if the system needs to be created
+        if params.sys_ID >= params.system_mark then 
+
+            data.solar_sys[params.sys_ID] = sload.load(params.sys_ID, params.gal_ID, params.P_ID)
+            data.stars[params.star_ID] = stload.load(params.sys_ID)
+            params.star_ID = data.planets[params.P_ID]:get_sysID()
+            params.star_mark = params.star_mark + 1
+            params.system_mark = params.system_mark + 1
+            print("4. sys_ID = ", params.sys_ID, "    4. gal_ID = ", params.gal_ID, "    star_ID = ", params.star_ID)
+            print("4.   star_mark = ", params.star_mark, "    system_mark = ", params.system_mark)
+        end 
         composer.removeHidden()
         composer.gotoScene("scene_solarsystem", "slideLeft")
     end

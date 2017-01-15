@@ -8,7 +8,7 @@ widget.setTheme("widget_theme_ios7")
 local loadsave = require("loadsave")
 
 
-
+local pload = require("load_planet")
 local planets = data.planets
 local params = data.params
 local stars = data.stars
@@ -47,9 +47,25 @@ local scene = composer.newScene()
 
 function onPlayTouch(event)
     if(event.phase == "ended") then 
-        params.P_ID = 1
-        params.star_ID = 0
-        params.sys_ID = 0
+        --CREATE OR CALL NECESSARY PLANET, STAR, AND SOLAR SYSTEM OBJECTS
+        if params.planet_mark == 1 then -- if no saved planet objects
+            data.planets[params.planet_mark] = pload.load(params.planet_mark,params.system_mark, params.galaxy_mark)  
+            params.P_ID = 1
+            params.star_ID = 1
+            params.sys_ID = 1 
+            params.gal_ID = 1 
+            params.planet_mark = params.planet_mark + 1
+            print("3. planet mark = ", params.planet_mark)
+        end
+
+        --else 
+            --create drop down menu of planets/systems/galaxies/universes to start off at (according to user progress)
+        
+            --NEED TO CREATE AND IMPLEMENT THIS, NOT POSSIBLE AT THE CURRENT TIME (Jan 14, 2017)
+
+        --end
+
+        
         composer.removeHidden( false )
         composer.gotoScene("scene_planet", "fade")
     end

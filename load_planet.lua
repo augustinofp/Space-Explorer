@@ -13,10 +13,10 @@ math.random(); math.random(); math.random()
 
 --INITAL TESTING CODE, NOT FINALIZED
 
-function load_planet.load(P_ID, sys_ID)
+function load_planet.load(P_ID, sys_ID, gal_ID)
 
 	
-	local key = math.random(10)
+	local key = math.random(11)
 
 
 	load_planet.images  = {"Images/blue_planet.png", "Images/dark_planet.png",
@@ -26,6 +26,7 @@ function load_planet.load(P_ID, sys_ID)
 	 "Images/alien_planet.png","Images/earth.png",
 	 "Images/cloudy_planet.png"}
 
+
 	 load_planet.images_ss  = {"Images/blue_planet_ss.png","Images/dark_planet_ss.png",
 	 "Images/gold_planet_ss.png","Images/rainbow_planet_ss.png" , 
 	 "Images/planet_1_ss.png", "Images/planet_2_ss.png", 
@@ -33,11 +34,15 @@ function load_planet.load(P_ID, sys_ID)
 	 "Images/alien_planet_ss.png", "Images/earth_ss.png",
 	  "Images/cloudy_planet_ss.png"} 
 
+	for i = 1, 11 do
+		print(load_planet.images[i], "    " , load_planet.images_ss[i])
+	end
+	
 
-	data.planets[P_ID] = planet.new(load_planet.images[key], P_ID, sys_ID, load_planet.images_ss[key])
-	print(key, "/t", data.planets[P_ID]:get_sysID())
+	print("key = ", key, "    ", "sys_ID = ", sys_ID, "    ", "gal_ID = ", gal_ID)
+	return planet.new(load_planet.images[key], P_ID, sys_ID, gal_ID, load_planet.images_ss[key])
+	
 
-	return true
 
 end
 

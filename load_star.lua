@@ -3,7 +3,38 @@ local planet = require("planet_class")
 local star = require("star_class")
 local data = require("data_storage")
 
-local function load_star(star_ID)
+
+
+local load_star = {}
+
+--atmosphere
+
+math.randomseed( os.time() )
+math.random(); math.random(); math.random()
+
+--INITAL TESTING CODE, NOT FINALIZED
+
+function load_star.load(sys_ID)
+
+	
+	local key = math.random(2)
+
+
+	load_star.images  = {"Images/sun.png", "Images/sun1.png"}
+
+	load_star.images_ss  = {"Images/sun_ss.png","Images/sun1_ss.png"} 
+
+
+	return star.new(load_star.images[key], sys_ID, load_star.images_ss[key])
+	--print(key, "/t", data.planets[P_ID]:get_sysID())
+
+end
+
+
+
+
+return load_star
+
 	
 
 

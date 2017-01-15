@@ -3,6 +3,7 @@ local planet = require("planet_class")
 local star = require("star_class")
 local data = require("data_storage")
 local composer = require( "composer" )
+local pload = require("load_planet")
 
 local scene = composer.newScene()
 
@@ -52,20 +53,33 @@ local planet_ss = {}
 -- -----------------------------------------------------------------------------------
 
 function goto_planet(event)
-    params.P_ID = event.target.param
 
+    --else do nothing and go to corresponding planet scene
     if(event.phase == "ended") then 
+        params.P_ID = event.target.param
+        print("5. P_ID = ", params.P_ID ,"  ")
+        print("5. " ,event.target.image == "area_circle.png" )
+        --if planet has not been created, create it
+        if event.target.image == "area_circle.png" then
+            
+            data.planets[params.P_ID] = pload.load(params.P_ID, params.sys_ID, params.gal_ID)
+            params.planet_mark = params.planet_mark + 1
+            print("5. planet mark = ",  params.planet_mark)
+        end
+
         composer.removeHidden()
         composer.gotoScene("scene_planet", "fade")
     end
+
     return true
 end
 
 function goto_galaxy(event)
 
     --update params table
-   
-    params.gal_ID = 1
+    -- params.gal_ID
+    -- data.galaxy[]
+
     
 
     
@@ -76,6 +90,11 @@ function goto_galaxy(event)
 
     return true
 end
+
+
+
+
+
 
 
 
@@ -92,8 +111,8 @@ function scene:create( event )
     local sceneGroup = self.view
     -- view here runs when the scene is first created but has not yet appeared on screen
 
-    --assign appropriate system, and star ID
-    sys_ID = params.sys_ID
+    
+    
     
    --data.stars[params.star_ID]:get_image()
 
@@ -126,10 +145,11 @@ function scene:create( event )
     
 
     --returns integer representing starting index of corresponding planets to current solar system
-    max = data.solar_sys[sys_ID]:get_pnum()
-    local start = data.solar_sys[sys_ID]:get_start()
+    max = data.solar_sys[params.sys_ID]:get_pnum()
+    local start = data.solar_sys[params.sys_ID]:get_p_start()
     local stop = start + max - 1
-
+    local flag = 0
+    local init_flag = 0
     --for each planet in the current solar system: create a ring, and a corresponding revolving planet image/button
     for i = start,stop do
      
@@ -145,9 +165,40 @@ function scene:create( event )
 
 
         --create  planet images
-        planet_ss[count] = widget.newButton{
+
+        --if planet hasnt been visited yet
+        if i >= params.planet_mark then
+            print(i >= params.planet_mark)
+            planet_ss[count] = widget.newButton{
+            defaultFile = "Images/area_circle.png"
+            }
+            planet_ss[count].image = "area_circle.png"
+            
+            planet_ss[count].param = i
+            flag = 0
+        
+        --if planet has already been visited
+        else
+            print(i >= params.planet_mark)
+            planet_ss[count] = widget.newButton{
             defaultFile = data.planets[i]:get_ssimage()
-        }
+            }
+            flag = 1
+            planet_ss[count].image = data.planets[i]:get_ssimage()
+            --planet_ss[count]:addEventListener("touch", goto_planet)
+            planet_ss[count].param = i
+            planet_ss[count]:addEventListener("touch", goto_planet)
+            init_flag = 1
+        end
+
+
+        --if the current planet has been unlocked
+      
+        if flag == 0 and init_flag == 1  then
+            
+            planet_ss[count]:addEventListener("touch", goto_planet)
+            init_flag = 0
+        end
 
         sceneGroup:insert(planet_ss[count])
         planet_ss[count].anchorX = anchor
@@ -170,17 +221,18 @@ function scene:create( event )
         transition.to( planet_ss[count], { time=40000, rotation=-360, iterations=0 } ) 
 
             
-        planet_ss[count]:addEventListener("touch", goto_planet)
-        planet_ss[count].param = i 
+        
+         
+         
         --print(planet_ss[count].param, "\n")
 
         --INCREMENT NECESSARY VALUES 
-        ring_x = ring_x + 100
+        ring_x = ring_x + 40
         ring_y = ring_x
         distance_x = distance_x + 30
         distance_y = distance_y + 30
         count = count + 1
-       
+        flag = 1
         
     end 
 
