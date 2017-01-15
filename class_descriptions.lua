@@ -1,7 +1,9 @@
 
+
+	local user = require("user_class")
 -- User Stats
 
-	user ={user.level, user.gold, user.resource, user.energy, user.explorer}
+	user = {user.level, user.gold, user.resource, user.energy, user.explorer}
 	user.level = 0
 	user.gold = 0
 	user.resource = 0 
@@ -38,13 +40,11 @@ local type5 = {energySystems5, resourceSystems5, transportationSystems5, battleS
 local type6 = {energySystems6, resourceSystems6, transportationSystems6, battleSystems6, decorations6}
 
 
--- Energy Systems 
-
---Primitive Energy Systems
-local energySystems0 = {windmill, windturbine, hydromill, hydroturbine, coal-mines}
+--Primitive Enerygy Systems 
+local energySystems0 = {fire, primitve-wind-turbine, primitive-water-turbine}
 
 --Semi-Planetary Energy Systems
-local energySystems1 = {wind-farms, solar-farms, nuclear-fission-power-plant, geothermal}
+local energySystems1 = {tidal-power-plant, advanced-wind-turbine-farms, ground-solar-farms, nuclear-fission-power-plant, geothermal-plant }
 
 --Planetary Energy Systems
 local energySystems2 = {solar-space-farms, nuclear-fusion-power-plant}
@@ -65,25 +65,25 @@ local energySystems6 = {negative-energy-generator}
 -- Resource Systems 
 
 -- Primitive Resource Systems
-local resourceSystems0 = {fire, well, aquaducts, farm}
+local resourceSystems0 = {well, windmill, farm, coal-mines}
 
 -- Semi-Planetary Resource Systems 
-local resourceSystems1 = {industrial-factory, oil-rig, satelittes, space-station}
+local resourceSystems1 = {industrial-factory, oil-rig, satelitte, space-station}
 
 -- Planetary Resource Systems 
 local resourceSystems2 = {elysium-station, particle-accelerator}
 
 -- Stellar Resource Systems 
-local resourceSystems3 = {planet-extractor, planetary-space-station, quauntum-physics-simulator }
+local resourceSystems3 = {planet-extractor, planetary-space-station, quauntum-computer }
 
 -- Galactic Resource Systems 
-local resourceSystems4 = {particle-assembler}
+local resourceSystems4 = {particle-assembler, planet-maker}
 
 -- Universial Resource Systems 
-local resourceSystems5 = {dark-matter-generator}
+local resourceSystems5 = {dark-matter-generator, star-maker}
 
 -- Multiversial Resource Systems 
-local resourceSystems6 = {quauntum-plank-manipulator}
+local resourceSystems6 = {quauntum-plank-manipulator, black-hole-maker}
 
 
 -- Transportation Systems 
@@ -95,7 +95,7 @@ local transportationSystems0 = {wagon, hot-air-balloon}
 local transportationSystems1 = {car, plane, launch-pad, rocket, space-shuttle}
 
 -- Planetary Transportation Systems 
-local transportationSystems2 = {space elevator, solar-sail, orio-nuclear-pulse}
+local transportationSystems2 = {space-elevator, advanced-space-shuttle, solar-sail, orio-nuclear-pulse}
 
 -- Stellar Transportation Systems 
 local transportationSystems3 = {galactic-cruiser, teleporter}
@@ -156,55 +156,5 @@ local decorations5 = {}
 
 -- Multiversial Decorations
 local decorations6 = {}
-
-
--- Object Calculations/ Game Mechanics 
-
---Primitive Energy Systems
-
--- Windmill Energy System 
-local windmill = {windmillImage, windmillEnerygyAccumulationRate}
-
--- Windmill Image
-windmillImage = {""}
-
--- Windmill Accumulation Function
-local function windmillEnerygyAccumulationRate()
-	user.energy = user.energy + 1
-	user.energy.text = user.energy
-	return user.energy
-end
-local windmillTimer = timer.performWithDelay( 1000, windmillEnerygyAccumulationRate )
-
-
-local windturbine
-
-local hydromill
-local hydroturbine
-local coal-mines
-
--- Primitive Resource Systems 
-
-local fire
-local well
-local aquaducts
-local farm
-
--- Primitive Transportation Systems 
-
-local wagon
-local hot-air-balloon
-
-
-
-
-
-
-
-
-
-
-
-
 
 

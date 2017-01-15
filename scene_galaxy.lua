@@ -33,6 +33,10 @@ local params = data.params
 
 
 
+print("P_ID = ", params.P_ID)
+print("star_ID = ", params.star_ID)
+print("sys_ID = ", params.sys_ID)
+print("gal_ID = ", params.gal_ID)
 
 
 --initialize ID local references

@@ -27,6 +27,11 @@ widget.setTheme("widget_theme_ios7")
 physics.start()
 physics.setGravity(0,0)
 
+print("P_ID = ", params.P_ID)
+print("star_ID = ", params.star_ID)
+print("sys_ID = ", params.sys_ID)
+print("gal_ID = ", params.gal_ID)
+
 
 
 -- -----------------------------------------------------------------------------------
@@ -55,7 +60,9 @@ function goto_solarsystem(event)
     --update params table
    
     params.sys_ID = data.planets[params.P_ID]:get_sysID()
+    
     params.star_ID = data.planets[params.P_ID]:get_sysID()
+    
 
     
 

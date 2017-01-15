@@ -172,16 +172,6 @@ function scene:create( event )
     -- btn_sounds:addEventListener("touch", onSoundsTouch)
 
 
-   
-
- 
-
-
-    math.randomseed( os.time() )
-    math.random(); math.random(); math.random()
-
-
-
     
 
     --Background Transition

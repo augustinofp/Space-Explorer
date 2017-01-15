@@ -16,6 +16,7 @@ physics.setGravity(0,0)
 
 
 
+
 -- -----------------------------------------------------------------------------------
 -- Code outside of the scene event functions below will only be executed ONCE unless
 -- the scene is removed entirely (not recycled) via "composer.removeScene()"
@@ -30,6 +31,10 @@ local planets = data.planets
 local params = data.params
 
 
+print("P_ID = ", params.P_ID)
+print("star_ID = ", params.star_ID)
+print("sys_ID = ", params.sys_ID)
+print("gal_ID = ", params.gal_ID)
 
 
 
@@ -88,7 +93,7 @@ function scene:create( event )
     -- view here runs when the scene is first created but has not yet appeared on screen
 
     --assign appropriate system, and star ID
-    sys_ID = data.planets[params.P_ID]:get_sysID()
+    sys_ID = params.sys_ID
     
    --data.stars[params.star_ID]:get_image()
 

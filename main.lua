@@ -125,16 +125,21 @@ display.setStatusBar(display.HiddenStatusBar)
 
 --CREATE NECESSARY PLANET, STAR, AND SOLAR SYSTEM OBJECTS
 pload.load(1,1)
+
+
+
 pload.load(2,1)
 pload.load(3,1)
 pload.load(4,1)
 pload.load(5,1)
-pload.load(1,1)
-pload.load(2,1)
-pload.load(3,1)
-pload.load(4,1)
-pload.load(5,1)
-pload.load(6,1)
+pload.load(6,2)
+pload.load(7,2)
+pload.load(8,2)
+pload.load(9,2)
+pload.load(10,2)
+pload.load(11,2)
+
+
 
 
 data.solar_sys[1] = solar.new(5, 1)

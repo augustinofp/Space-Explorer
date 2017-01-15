@@ -8,7 +8,6 @@ local load_planet = {}
 
 --atmosphere
 
-
 math.randomseed( os.time() )
 math.random(); math.random(); math.random()
 
@@ -16,9 +15,9 @@ math.random(); math.random(); math.random()
 
 function load_planet.load(P_ID, sys_ID)
 
-
+	
 	local key = math.random(10)
-	print(key)
+
 
 	load_planet.images  = {"Images/blue_planet.png", "Images/dark_planet.png",
 	 "Images/gold_planet.png", "Images/rainbow_planet.png" , 
@@ -36,7 +35,7 @@ function load_planet.load(P_ID, sys_ID)
 
 
 	data.planets[P_ID] = planet.new(load_planet.images[key], P_ID, sys_ID, load_planet.images_ss[key])
-
+	print(key, "/t", data.planets[P_ID]:get_sysID())
 
 	return true
 
