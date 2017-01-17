@@ -20,6 +20,7 @@ function Planet.new(image, P_ID, sys_ID, gal_ID, ss_image)
   self.sys_ID = sys_ID
   self.gal_ID = gal_ID
   self.ss_image = ss_image
+  --self.unlock = unlocked
   return self
 end
 
@@ -127,5 +128,13 @@ end
 function Planet.get_ssimage(self)
 	return self.ss_image
 end
+
+-- function Planet.set_unlock(self, unlocked)
+--   self.unlock = unlocked
+-- end
+
+-- function Planet.get_unlock(self)
+--   return self.unlock
+-- end
 
 return Planet

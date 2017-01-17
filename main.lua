@@ -11,9 +11,11 @@ local galaxy = require("galaxy_class")
 data.planets = {}
 data.stars = {}
 data.solar_sys = {}
+data.blackholes = {}
 data.galaxy = {}
 data.universe = {}
 data.multiverse = {}
+
 
 data.params = {}
 data.init_flag = 0
@@ -22,6 +24,7 @@ data.params.P_ID = 0
 data.params.sys_ID = 0
 data.params.star_ID = 0
 data.params.gal_ID = 0
+data.params.hole_ID = 0
 data.params.uni_ID = 0
 data.params.multi_ID = 1
 
@@ -29,6 +32,7 @@ data.params.planet_mark = 1
 data.params.system_mark = 1
 data.params.star_mark = 1
 data.params.galaxy_mark = 1
+data.params.hole_mark = 1
 data.params.universe_mark = 1
 data.params.multi_mark = 1
 

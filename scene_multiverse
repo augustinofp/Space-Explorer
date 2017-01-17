@@ -1,0 +1,27 @@
+local master = require("master_storage")
+local composer = require( "composer" )
+local scene = composer.newScene()
+local widget = require "widget"
+widget.setTheme("widget_theme_ios7")
+local physics = require "physics"
+physics.start()
+physics.setGravity(0,0
+
+
+--assign local references to the object tables in master storage
+local universe = master.get_universe()
+
+local function goto_universe(event)
+    local options = {effect = "slideLeft"}
+    if(event.phase == "ended") then 
+        composer.gotoScene("scene_planet", "slideLeft")
+    end
+    return true
+end
+
+local max = master.tablelength(universe)
+
+for i = 1,max do
+	-
+	local solar_ring1 = display.newImageRect(sceneGroup, "images/solar_ring.png", 350, 350)
+solar_ring1.x = display.contentCenterX; solar_ring1.y = display.contentCenterY

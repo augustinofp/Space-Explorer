@@ -32,6 +32,7 @@ print("P_ID = ", params.P_ID)
 print("star_ID = ", params.star_ID)
 print("sys_ID = ", params.sys_ID)
 print("gal_ID = ", params.gal_ID)
+print("hole_ID = ", params.hole_ID)
 print("3. planet mark = ", params.planet_mark)
 
 
@@ -68,19 +69,20 @@ function goto_solarsystem(event)
         --update params table
         params.sys_ID = data.planets[params.P_ID]:get_sysID()
         params.gal_ID = data.planets[params.P_ID]:get_galID()
-
+        params.star_ID = data.planets[params.P_ID]:get_sysID()
+        params.hole_ID = data.planets[params.P_ID]:get_galID()
         -- print("4. sys_ID = ", params.sys_ID, "    4. gal_ID = ", params.gal_ID)
         -- print("4. ", params.sys_ID >= params.system_mark)
 
         --if the system needs to be created
-        if params.sys_ID >= params.system_mark then 
+        if data.solar_sys[params.sys_ID] == nil then 
 
-            data.solar_sys[params.sys_ID] = sload.load(params.sys_ID, params.gal_ID, params.P_ID)
+            data.solar_sys[params.sys_ID] = sload.load(params.sys_ID, params.gal_ID, params.P_ID, true)
             data.stars[params.star_ID] = stload.load(params.sys_ID)
-            params.star_ID = data.planets[params.P_ID]:get_sysID()
+            
             params.star_mark = params.star_mark + 1
             params.system_mark = params.system_mark + 1
-            print("4. sys_ID = ", params.sys_ID, "    4. gal_ID = ", params.gal_ID, "    star_ID = ", params.star_ID)
+            print("4. sys_ID = ", params.sys_ID, "    4. gal_ID = ", params.gal_ID, "    star_ID = ", params.star_ID, "hole_ID = ", params.hole_ID)
             print("4.   star_mark = ", params.star_mark, "    system_mark = ", params.system_mark)
         end 
         composer.removeHidden()

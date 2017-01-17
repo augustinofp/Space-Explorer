@@ -1,11 +1,14 @@
 local solar = {}
 solar.__index = solar
 --ring_size
-function solar.new(planet_number, p_start, gal_ID)
+function solar.new(planet_number, p_start, sys_ID, gal_ID, p_init)
 	local self = setmetatable({}, solar)
 	self.pnum = planet_number
+	--self.p_unlock = p_unlocked
 	self.p_start = p_start
 	self.gal_ID = gal_ID
+	self.sys_ID = sys_ID
+	self.init = p_init
 	--self.ring_size = ring_size
 	return self
 end  
@@ -19,12 +22,14 @@ function solar.get_pnum(self)
 	return self.pnum
 end
 
--- function set_ring_size(self, ring_size)
--- 	self.ring_size = ring_size
+
+-- function solar.set_p_unlock(self, number)
+-- 	self.p_unlock = number
+
 -- end
 
--- function get_ring_size(self)
--- 	return self.ring_size
+-- function solar.get_p_unlock(self)
+-- 	return self.p_unlock
 -- end
 
 function solar.set_p_start(self, number)
@@ -44,5 +49,24 @@ end
 function solar.get_gal_ID(self)
 	return self.gal_ID
 end
+
+function solar.set_sys_ID(self, number)
+	self.sys_ID = number
+
+end
+
+function solar.get_sys_ID(self)
+	return self.sys_ID
+end
+
+function solar.set_init(self, number)
+	self.init = number
+
+end
+
+function solar.get_init(self)
+	return self.init
+end
+
 
 return solar

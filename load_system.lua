@@ -14,14 +14,14 @@ math.random(); math.random(); math.random()
 
 --INITAL TESTING CODE, NOT FINALIZED
 
-function load_system.load(sys_ID, gal_ID, p_start)
+function load_system.load(sys_ID, gal_ID, p_start, init)
 
 	
 	
-	local key = math.random(3, 8)
+	local key = math.random(3, 5)
 
 
-	return solar_sys.new(key, p_start, gal_ID)
+	return solar_sys.new(key, p_start, sys_ID, gal_ID, init)
 	--print(key, "/t", data.planets[P_ID]:get_sysID())
 
 end

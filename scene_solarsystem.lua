@@ -4,6 +4,8 @@ local star = require("star_class")
 local data = require("data_storage")
 local composer = require( "composer" )
 local pload = require("load_planet")
+local gload = require("load_galaxy")
+local bhload = require("load_blackhole")
 
 local scene = composer.newScene()
 
@@ -36,6 +38,7 @@ print("P_ID = ", params.P_ID)
 print("star_ID = ", params.star_ID)
 print("sys_ID = ", params.sys_ID)
 print("gal_ID = ", params.gal_ID)
+print("hole_ID = ", params.hole_ID)
 
 
 
@@ -54,11 +57,11 @@ local planet_ss = {}
 
 function goto_planet(event)
 
-    --else do nothing and go to corresponding planet scene
+    
     if(event.phase == "ended") then 
         params.P_ID = event.target.param
         print("5. P_ID = ", params.P_ID ,"  ")
-        print("5. " ,event.target.image == "area_circle.png" )
+        
         --if planet has not been created, create it
         if event.target.image == "area_circle.png" then
             
@@ -79,14 +82,29 @@ function goto_galaxy(event)
     --update params table
     -- params.gal_ID
     -- data.galaxy[]
+    if(event.phase == "ended") then
+            --update params table
+            params.sys_ID = data.solar_sys[params.sys_ID]:get_sys_ID()
+            params.gal_ID = data.solar_sys[params.sys_ID]:get_gal_ID()
+            params.star_ID = data.solar_sys[params.sys_ID]:get_sys_ID()
+            params.hole_ID = data.solar_sys[params.sys_ID]:get_gal_ID()
+            -- print("4. sys_ID = ", params.sys_ID, "    4. gal_ID = ", params.gal_ID)
+            -- print("4. ", params.sys_ID >= params.system_mark)
 
-    
+            --if the galaxy needs to be created
+            if data.galaxy[params.gal_ID] == nil then 
 
-    
-    if(event.phase == "ended") then 
-        composer.removeHidden()
-        composer.gotoScene("scene_galaxy", "slideLeft")
-    end
+                data.galaxy[params.gal_ID] = gload.load(params.gal_ID, params.uni_ID, params.sys_ID, true)
+                data.blackholes[params.hole_ID] = bhload.load(params.gal_ID)
+                
+                params.hole_mark = params.hole_mark + 1
+                params.galaxy_mark = params.galaxy_mark + 1
+                print("4. sys_ID = ", params.sys_ID, "    4. gal_ID = ", params.gal_ID, "    star_ID = ", params.star_ID, "hole_ID = ", params.hole_ID)
+                print("4.   star_mark = ", params.star_mark, "    system_mark = ", params.system_mark)
+            end 
+            composer.removeHidden()
+            composer.gotoScene("scene_galaxy", "slideLeft")
+        end
 
     return true
 end
@@ -120,7 +138,7 @@ function scene:create( event )
     
     --Display the Appropriate star image/button
     
-    sun = display.newImageRect(sceneGroup,data.stars[params.star_ID]:get_image(), 100, 100)
+    sun = display.newImageRect(sceneGroup, data.stars[params.star_ID]:get_image(), 100, 100)
     sun.x =  display.contentCenterX ; sun.y = display.contentCenterY;
 
     circle = display.newCircle (sceneGroup, 100,100,200)
@@ -150,6 +168,7 @@ function scene:create( event )
     local stop = start + max - 1
     local flag = 0
     local init_flag = 0
+
     --for each planet in the current solar system: create a ring, and a corresponding revolving planet image/button
     for i = start,stop do
      
@@ -166,23 +185,35 @@ function scene:create( event )
 
         --create  planet images
 
-        --if planet hasnt been visited yet
-        if i >= params.planet_mark then
-            print(i >= params.planet_mark)
+        --if planet hasnt been created yet, and 
+        if data.planets[i] == nil  then
+            print(data.planets[i] == nil)
+
             planet_ss[count] = widget.newButton{
             defaultFile = "Images/area_circle.png"
             }
+
             planet_ss[count].image = "area_circle.png"
             
             planet_ss[count].param = i
             flag = 0
+
+            --if no planets have been visited
+
+            if (data.solar_sys[params.sys_ID]:get_init() == false) then
+                planet_ss[count]:addEventListener("touch", goto_planet)
+                data.solar_sys[params.sys_ID]:set_init(true) --initialize the system
+            end
+
         
         --if planet has already been visited
         else
-            print(i >= params.planet_mark)
+            print(data.planets[i] == nil)
+
             planet_ss[count] = widget.newButton{
             defaultFile = data.planets[i]:get_ssimage()
             }
+
             flag = 1
             planet_ss[count].image = data.planets[i]:get_ssimage()
             --planet_ss[count]:addEventListener("touch", goto_planet)

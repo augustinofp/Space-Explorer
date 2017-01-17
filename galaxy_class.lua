@@ -1,11 +1,14 @@
  local galaxy = {}
 galaxy.__index = galaxy
 --ring_size
-function galaxy.new(image, snum, start)
+function galaxy.new(snum, s_start, gal_ID, uni_ID, init)
 	local self = setmetatable({}, galaxy)
-	self.image = image
+	self.start = s_start
 	self.snum = snum
-	self.start = start
+	--self.s_unlock = s_unlock
+	self.uni_ID = uni_ID
+	self.gal_ID = gal_ID
+	self.init = init
 	--self.ring_size = ring_size
 	return self
 end  
@@ -19,12 +22,14 @@ function galaxy.get_snum(self)
 	return self.snum
 end
 
--- function set_ring_size(self, ring_size)
--- 	self.ring_size = ring_size
+
+-- function galaxy.set_s_unlock(self, number)
+-- 	self.s_unlock = number
+
 -- end
 
--- function get_ring_size(self)
--- 	return self.ring_size
+-- function galaxy.get_s_unlock(self)
+-- 	return self.s_unlock
 -- end
 
 function galaxy.set_start(self, number)
@@ -36,12 +41,30 @@ function galaxy.get_start(self)
 	return self.start
 end
 
-function galaxy.set_image(self, image)
-	self.image = image
+function galaxy.set_uni_ID(self, uni_ID)
+	self.uni_ID = uni_ID
 end
 
-function galaxy.get_image(self)
-	return self.image
+function galaxy.get_uni_ID(self)
+	return self.uni_ID
 end
+
+function galaxy.set_gal_ID(self, gal_ID)
+	self.gal_ID = gal_ID
+end
+
+function galaxy.get_gal_ID(self)
+	return self.gal_ID
+end
+
+
+function galaxy.set_init(self, init)
+	self.init = init
+end
+
+function galaxy.get_init(self)
+	return self.init
+end
+
 
 return galaxy

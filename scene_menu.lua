@@ -54,6 +54,7 @@ function onPlayTouch(event)
             params.star_ID = 1
             params.sys_ID = 1 
             params.gal_ID = 1 
+            params.hole_ID = 1
             params.planet_mark = params.planet_mark + 1
             print("3. planet mark = ", params.planet_mark)
         end
