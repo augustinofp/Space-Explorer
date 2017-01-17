@@ -1,11 +1,11 @@
 -- INCLUDE COMPOSER
 local composer = require( "composer" )
-local data = require("data_storage")
-local planet = require("planet_class")
-local star = require("star_class")
-local solar = require("solar_sys_class")
+local data = require("scripts.data_storage")
+local planet = require("scripts.planet_class")
+local star = require("scripts.star_class")
+local solar = require("scripts.solar_sys_class")
 --local pload = require("load_planet")
-local galaxy = require("galaxy_class")
+local galaxy = require("scripts.galaxy_class")
 
 --Initialize master data file
 data.planets = {}
@@ -26,7 +26,7 @@ data.params.star_ID = 0
 data.params.gal_ID = 0
 data.params.hole_ID = 0
 data.params.uni_ID = 0
-data.params.multi_ID = 1
+data.params.multi_ID = 0
 
 data.params.planet_mark = 1
 data.params.system_mark = 1
@@ -159,7 +159,7 @@ display.setStatusBar(display.HiddenStatusBar)
 
 -- data.galaxy[1] = galaxy.new("Images/galaxy.png", 2, 1)
 
-composer.gotoScene( "scene_menu", {effect = "fade", time = 500})
+composer.gotoScene( "scripts.scene_menu", {effect = "fade", time = 500})
 
 
 --Augustino, December 22, 2016
