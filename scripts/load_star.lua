@@ -1,7 +1,7 @@
 
 local planet = require("scripts.planet_class")
 local star = require("scripts.star_class")
-local data = require("scripts.data_storage")
+--local data = require("scripts.data_storage")
 
 
 

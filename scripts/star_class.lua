@@ -14,7 +14,7 @@ function Star.new(image, sys_ID, ssimage)
   -- self.level = level
   self.image = image
   self.sys_ID = sys_ID
-  self.ssimage = ssimage
+  self.ss_image = ssimage
 
   return self
 
@@ -68,12 +68,12 @@ function Star.get_sysID(self)
 	return self.sys_ID
 end
 
-function Star.set_ssimage(self, ssimage)
-  self.ssimage = ssimage
+function Star.set_ss_image(self, ssimage)
+  self.ss_image = ssimage
 end
 
 function Star.get_ssimage(self)
-  return self.ssimage
+  return self.ss_image
 end
 
 return Star

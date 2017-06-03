@@ -1,12 +1,15 @@
 --scene_solarsystem.lua
 local planet = require("scripts.planet_class")
 local star = require("scripts.star_class")
-local data = require("scripts.data_storage")
+--local data = require("scripts.data_storage")
 local galaxy_class = require("scripts.galaxy_class")
 local composer = require( "composer" )
 local sload = require("scripts.load_system")
 local stload = require("scripts.load_star")
 local uload = require("scripts.load_universe")
+local loadsave = require("scripts.loadsave")
+local data = require("scripts.register")
+
 
 
 local scene = composer.newScene()
@@ -28,11 +31,11 @@ physics.setGravity(0,0)
 
 -- local forward references should go here
 
-local universes = data.universe
+local universe = data.universe
 local solar_sys = data.solar_sys
 local stars = data.stars
 local planets = data.planets
-local galaxies = data.galaxy
+local galaxy = data.galaxy
 local params = data.params
 local blackholes = data.blackholes
 
@@ -70,19 +73,36 @@ function goto_solarsystem(event)
         --if system hasnt been visited
         if event.target.image == "area_circle.png" then
             
-            data.solar_sys[params.sys_ID] = sload.load( params.sys_ID, params.gal_ID, params.planet_mark, false)
-            data.stars[params.star_ID] = stload.load(params.sys_ID)
+            solar_sys[params.sys_ID] = sload.load( params.sys_ID, params.gal_ID, params.planet_mark, false)
+            stars[params.star_ID] = stload.load(params.sys_ID)
+
+
             params.system_mark = params.system_mark + 1
+            params.star_mark = params.star_mark + 1
+
+             --SAVE INFORMATION
+            loadsave.saveTable(planets, "planets.json" , system.DocumentsDirectory)
+            loadsave.saveTable(stars, "stars.json" , system.DocumentsDirectory)
+            loadsave.saveTable(blackholes, "blackholes.json" , system.DocumentsDirectory)
+            loadsave.saveTable(solar_sys, "solar_sys.json" , system.DocumentsDirectory)
+            loadsave.saveTable(galaxy, "galaxy.json" , system.DocumentsDirectory)
+            loadsave.saveTable(universe, "universe.json" , system.DocumentsDirectory)
+            loadsave.saveTable(multiverse, "multiverse.json" , system.DocumentsDirectory)
             print("5. system mark = ",  params.system_mark)
         end
+
+        --SAVE INFORMATION
+        loadsave.saveTable(params, "params.json" , system.DocumentsDirectory)
+        
         composer.removeHidden()
         composer.gotoScene("scripts.scene_solarsystem", "fade")
     end
-
     return true
 end
 
 function goto_universe(event)
+
+
 
     --update params table
     -- params.gal_ID
@@ -94,19 +114,34 @@ function goto_universe(event)
     
     if(event.phase == "ended") then 
 
-        params.gal_ID = data.solar_sys[params.sys_ID]:get_gal_ID()
-        params.uni_ID = data.galaxy[params.gal_ID]:get_uni_ID()
+        
+        params.uni_ID = galaxy[params.gal_ID].uni_ID
 
         --if the universe needs to be created
-        if data.universe[params.uni_ID] == nil then 
+        if universe[params.uni_ID] == nil then 
 
-            data.universe[params.uni_ID] = uload.load(params.uni_ID, params.multi_ID, params.gal_ID, true)
+            universe[params.uni_ID] = uload.load(params.uni_ID, params.multi_ID, params.gal_ID, true)
             
             
             params.universe_mark = params.universe_mark + 1
+
+             --SAVE INFORMATION
+            loadsave.saveTable(planets, "planets.json" , system.DocumentsDirectory)
+            loadsave.saveTable(stars, "stars.json" , system.DocumentsDirectory)
+            loadsave.saveTable( blackholes, "blackholes.json" , system.DocumentsDirectory)
+            loadsave.saveTable(solar_sys, "solar_sys.json" , system.DocumentsDirectory)
+            loadsave.saveTable(galaxy, "galaxy.json" , system.DocumentsDirectory)
+            loadsave.saveTable(universe, "universe.json" , system.DocumentsDirectory)
+            loadsave.saveTable(multiverse, "multiverse.json" , system.DocumentsDirectory)
+
             print("4. sys_ID = ", params.sys_ID, "    4. gal_ID = ", params.gal_ID, "    star_ID = ", params.star_ID, "uni_ID = ", params.universe_ID)
             print("4.   star_mark = ", params.star_mark, "    system_mark = ", params.system_mark)
         end 
+
+
+         --SAVE INFORMATION
+        loadsave.saveTable(params, "params.json" , system.DocumentsDirectory)
+
         composer.removeHidden()
         composer.gotoScene("scripts.scene_universe", "slideLeft")
     end
@@ -122,7 +157,7 @@ local blackhole
 local circle
 local solar_ring
 local button_left
-local galaxy 
+ 
 
 -- create()
 function scene:create( event )
@@ -137,7 +172,7 @@ function scene:create( event )
     
     --Display the Appropriate blackhole image/button
     
-    blackhole = display.newImageRect(sceneGroup, data.blackholes[params.hole_ID]:get_image(), 100, 100)
+    blackhole = display.newImageRect(sceneGroup, blackholes[params.hole_ID].image, 100, 100)
     blackhole.x =  display.contentCenterX ; blackhole.y = display.contentCenterY;
 
     circle = display.newCircle (sceneGroup, 100,100,200)
@@ -162,8 +197,10 @@ function scene:create( event )
     
 
     --returns integer representing starting index of corresponding systems to current galaxy
-    max = data.galaxy[params.gal_ID]:get_snum()
-    local start = data.galaxy[params.gal_ID]:get_start()
+    max = galaxy[params.gal_ID].snum
+    print(max)
+    local start = galaxy[params.gal_ID].start
+    print(start)
     local stop = start + max - 1
     local flag = 0
     local init_flag = 0
@@ -185,36 +222,41 @@ function scene:create( event )
         --create  star images
 
         --if system hasnt been visited yet
-        if data.solar_sys[i] == nil then
-            print(data.solar_sys[i] == nil)
+        
+        if solar_sys[i] == nil then
+            print("solar system ", i, " creation is: ", solar_sys[i] == nil)
 
             star_ss[count] = widget.newButton{
             defaultFile = "Images/area_circle.png"
             }
 
             star_ss[count].image = "area_circle.png"
+            print(star_ss[count].image)
             
             star_ss[count].param = i
             flag = 0
 
             --if no systems have been visited
-            if (data.galaxy[params.gal_ID]:get_init() == false) then
+            if (galaxy[params.gal_ID].init == false) then
                 star_ss[count]:addEventListener("touch", goto_solarsystem)
-                data.galaxy[params.gal_ID]:set_init(true) --initialize the system
+                galaxy[params.gal_ID]:set_init(true) --initialize the system
             end
 
 
         
         --if system has already been visited
         else
-            print(data.solar_sys[i] == nil)
+            print("solar system ", i, " creation is: ", solar_sys[i] == nil)
 
             star_ss[count] = widget.newButton{
-            defaultFile = data.stars[i]:get_ssimage()
-            }
+            defaultFile = stars[i].ss_image}
+            
             
             flag = 1
-            star_ss[count].image = data.stars[i]:get_ssimage()
+            star_ss[count].image = stars[i].ss_image
+            print(i)
+            print(stars[i].ss_image)
+            print(star_ss[count].image)
             --planet_ss[count]:addEventListener("touch", goto_planet)
             star_ss[count].param = i
             star_ss[count]:addEventListener("touch", goto_solarsystem)

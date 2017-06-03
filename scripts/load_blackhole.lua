@@ -1,7 +1,5 @@
 local planet = require("scripts.planet_class")
 local blackhole = require("scripts.blackhole_class")
-local data = require("scripts.data_storage")
-
 
 
 local load_blackhole = {}

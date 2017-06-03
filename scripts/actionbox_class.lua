@@ -3,15 +3,16 @@ actionbox.__index = actionbox --failed table lookups should fall back to class t
 	
 
 
-function actionbox.new( Image, Explorers, BuiltSystem, SystemLocation, ActionBoxType)
+function actionbox.new( Image, Explorers, BuiltSystem, SystemLocation, ActionBoxType, P_ID)
 	
-	local self = setmetatable({}, actionbox_system)
+	local self = setmetatable({}, actionbox)
 
 	self.Image = Image
 	self.Explorers = Explorers
 	self.BuiltSystem = BuiltSystem
 	self.SystemLocation = SystemLocation
 	self.ActionBoxType = ActionBoxType
+	self.P_ID = P_ID 
 
   	return self
 end
@@ -57,14 +58,21 @@ function actionbox.get_ActionBoxType(self)
 	return self.ActionBoxType
 end
 
+function actionbox.set_P_ID( self, P_ID )
+	self.P_ID = P_ID
+end
+
+function actionbox.get_P_ID( self )
+	return self.P_ID
+end
+
+
 return actionbox
 
 
 -- Action Box Object 
 
 --local actionbox_1 = actionbox_system.new("Images/area_circle.png", "Explorers: # of Explorers on the action box", "BuiltSystem: Energy System or Resource System", "SystemLocation", "ActionBoxType: Space or Terrain")
-
-
 
 
 

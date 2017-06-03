@@ -1,4 +1,4 @@
-local data = require("scripts.data_storage")
+local data = require("scripts.register")
 local composer = require( "composer" )
 local scene = composer.newScene()
 local universe = require("scripts.universe_class")
@@ -12,6 +12,17 @@ physics.start()
 physics.setGravity(0,0
 
 
+
+
+-- local forward references should go here
+
+local universes = data.universe
+local solar_sys = data.solar_sys
+local stars = data.stars
+local planets = data.planets
+local galaxy = data.galaxy
+local params = data.params
+local blackholes = data.blackholes
 
 --initialize ID local references
 
@@ -37,11 +48,25 @@ function goto_universe(event)
         --if universe hasnt been visited
         if event.target.image == "area_circle.png" then
             
-            data.universe[params.uni_ID] = uload.load( params.uni_ID, params.multi_ID, params.galaxy_mark, false)
+            universe[params.uni_ID] = uload.load( params.uni_ID, params.multi_ID, params.galaxy_mark, false)
             
-            params.univeres_mark = params.universe_mark + 1
+            params.universe_mark = params.universe_mark + 1
+
+            --SAVE INFORMATION
+            loadsave.saveTable(planets, "planets.json" , system.DocumentsDirectory)
+            loadsave.saveTable(stars, "stars.json" , system.DocumentsDirectory)
+            loadsave.saveTable( blackholes, "blackholes.json" , system.DocumentsDirectory) 
+            loadsave.saveTable(solar_sys, "solar_sys.json" , system.DocumentsDirectory)
+            loadsave.saveTable(galaxy, "galaxy.json" , system.DocumentsDirectory)
+            loadsave.saveTable(universe, "universe.json" , system.DocumentsDirectory)
+            loadsave.saveTable(multiverse, "multiverse.json" , system.DocumentsDirectory)
+
             print("5. universe mark = ",  params.universe_mark)
         end
+
+
+        --SAVE INFORMATION
+        loadsave.saveTable(params, "params.json" , system.DocumentsDirectory)
 
         composer.removeHidden()
         composer.gotoScene("scripts.scene_universe", "fade")
@@ -54,6 +79,18 @@ function goto_credits(event)
 	if(event.phase == "ended") then
 		--get total number of planets/systems etc... discovered
 		--get/modify final user attribute totals (resources, wealth)
+
+       --SAVE INFORMATION
+            loadsave.saveTable(planets, "planets.json" , system.DocumentsDirectory)
+            loadsave.saveTable(stars, "stars.json" , system.DocumentsDirectory)
+            loadsave.saveTable( blackholes, "blackholes.json" , system.DocumentsDirectory)
+            loadsave.saveTable(solar_sys, "solar_sys.json" , system.DocumentsDirectory)
+            loadsave.saveTable(galaxy, "galaxy.json" , system.DocumentsDirectory)
+            loadsave.saveTable(universe, "universe.json" , system.DocumentsDirectory)
+            loadsave.saveTable(multiverse, "multiverse.json" , system.DocumentsDirectory)
+            loadsave.saveTable(params, "params.json" , system.DocumentsDirectory)
+
+
 		composer.removeHidden()
         composer.gotoScene("scripts.scene_credits", "fade")
 
@@ -107,8 +144,8 @@ function scene:create( event )
     
 
     --returns integer representing starting index of corresponding universes in the multiverse
-    max = data.multiverse[params.multi_ID]:get_unum()
-    local start = data.multiverse[params.multi_ID]:get_start()
+    max = multiverse[params.multi_ID].unum
+    local start = multiverse[params.multi_ID].start
     local stop = start + max - 1
     local flag = 0
     local init_flag = 0
@@ -130,8 +167,8 @@ function scene:create( event )
         --create  universe images
 
         --if universe hasnt been visited yet
-        if data.universe[i] == nil then
-            print(data.universe[i] == nil)
+        if universe[i] == nil then
+            print(universe[i] == nil)
 
             uni_ss[count] = widget.newButton{
             defaultFile = "Images/area_circle.png"
@@ -143,23 +180,23 @@ function scene:create( event )
             flag = 0
 
             --if no universes have been visited
-            if (data.multiverse[params.multi_ID]:get_init() == false) then
+            if (multiverse[params.multi_ID].init == false) then
                 uni_ss[count]:addEventListener("touch", goto_universe)
-                data.multiverse[params.multi_ID]:set_init(true) --initialize the multiverse
+                multiverse[params.multi_ID]:set_init(true) --initialize the multiverse
             end
 
 
         
         --if the universe has already been visited
         else
-            print(data.universe[i] == nil)
+            print(universe[i] == nil)
 
             uni_ss[count] = widget.newButton{
-            defaultFile = data.universe[i]:get_ssimage()
+            defaultFile = universe[i].ss_image
             }
             
             flag = 1
-            uni_ss[count].image = data.universe[i]:get_ssimage()
+            uni_ss[count].image = universe[i].ss_image
             --planet_ss[count]:addEventListener("touch", goto_planet)
             uni_ss[count].param = i
             uni_ss[count]:addEventListener("touch", goto_universe)

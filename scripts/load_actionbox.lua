@@ -1,4 +1,3 @@
-
 local actionbox = require("scripts.actionbox_class")
 local data = require("scripts.data_storage")
 
@@ -13,7 +12,7 @@ math.random(); math.random(); math.random()
 
 --INITAL TESTING CODE, NOT FINALIZED
 
-function load_actionbox.load( Image, Explorers, BuiltSystem, SystemLocation, ActionBoxType, P_ID)
+function load_actionbox.load(P_ID, actionbox)
 
 	
 	 
@@ -24,8 +23,8 @@ function load_actionbox.load( Image, Explorers, BuiltSystem, SystemLocation, Act
 
 	
 
-	
-	return actionbox.new(load_actionbox.images[1], 1, 1 , 1 , 1 ,1, P_ID )
+	print("key = ", key)
+	return actionbox.new(load_actionbox.images[1], P_ID )
 
 
 
@@ -35,5 +34,3 @@ end
 
 
 return load_actionbox
-
-

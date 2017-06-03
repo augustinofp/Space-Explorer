@@ -1,6 +1,6 @@
 --randomizing Objects
 local planet = require("scripts.planet_class")
-local data = require("scripts.data_storage")
+--local data = require("scripts.data_storage")
 local solar_sys = require("scripts.solar_sys_class")
 
 

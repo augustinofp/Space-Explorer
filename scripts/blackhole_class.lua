@@ -14,7 +14,7 @@ function blackhole.new(image, gal_ID, ssimage)
   -- self.level = level
   self.image = image
   self.gal_ID = gal_ID
-  self.ssimage = ssimage
+  self.ss_image = ssimage
 
   return self
 
@@ -69,11 +69,11 @@ function blackhole.get_galID(self)
 end
 
 function blackhole.set_ssimage(self, ssimage)
-  self.ssimage = ssimage
+  self.ss_image = ssimage
 end
 
 function blackhole.get_ssimage(self)
-  return self.ssimage
+  return self.ss_image
 end
 
 return blackhole

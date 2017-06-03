@@ -2,25 +2,35 @@ local composer = require( "composer" )
 local loadsave = require("scripts.loadsave")
 local planet = require("scripts.Planet_class")
 local solar = require("scripts.solar_sys_class")
-local data = require("scripts.data_storage")
+--local data = require("scripts.data_storage")
 local widget = require ("widget")
 local physics = require ("physics")
 local star = require("scripts.star_class")
 local pload = require("scripts.load_planet")
 local sload = require("scripts.load_system")
 local stload = require("scripts.load_star")
+local data = require("scripts.register")
 
 local scene = composer.newScene()
 
 local universe = data.universe
 local solar_sys = data.solar_sys
 local planets = data.planets
-local P_ID = 0
-local sys_ID = 0
 local params = data.params
 local stars = data.stars
+local galaxy = data.galaxy
+local multiverse = data.multiverse
+local blackholes = data.blackholes
 
 
+print("universe = ", universe)
+print("solar_sys = ", solar_sys)
+
+print("planets = ", planets)
+print("params = ", params)
+print("stars = ", stars)
+print("galaxy = ", galaxy)
+print("multiverse = ", multiverse)
 
 widget.setTheme("widget_theme_ios7")
 
@@ -29,11 +39,16 @@ physics.start()
 physics.setGravity(0,0)
 
 print("P_ID = ", params.P_ID)
+print("P_save = ", params.P_save)
+
 print("star_ID = ", params.star_ID)
 print("sys_ID = ", params.sys_ID)
 print("gal_ID = ", params.gal_ID)
 print("hole_ID = ", params.hole_ID)
 print("3. planet mark = ", params.planet_mark)
+
+
+print(planets[1].image)
 
 
 
@@ -61,33 +76,52 @@ print("3. planet mark = ", params.planet_mark)
 function goto_solarsystem(event)
 
   
-
-
-
     
     if(event.phase == "ended") then
+
         --update params table
-        params.sys_ID = data.planets[params.P_ID]:get_sysID()
-        params.gal_ID = data.planets[params.P_ID]:get_galID()
-        params.star_ID = data.planets[params.P_ID]:get_sysID()
-        params.hole_ID = data.planets[params.P_ID]:get_galID()
+        params.sys_ID = planets[params.P_ID].sys_ID
+        params.gal_ID = planets[params.P_ID].gal_ID
+        params.star_ID = planets[params.P_ID].sys_ID
+        params.hole_ID = planets[params.P_ID].gal_ID
+
         -- print("4. sys_ID = ", params.sys_ID, "    4. gal_ID = ", params.gal_ID)
         -- print("4. ", params.sys_ID >= params.system_mark)
 
         --if the system needs to be created
-        if data.solar_sys[params.sys_ID] == nil then 
+        if solar_sys[params.sys_ID] == nil then 
 
-            data.solar_sys[params.sys_ID] = sload.load(params.sys_ID, params.gal_ID, params.P_ID, true)
-            data.stars[params.star_ID] = stload.load(params.sys_ID)
+            solar_sys[params.sys_ID] = sload.load(params.sys_ID, params.gal_ID, params.P_ID, true)
+            stars[params.star_ID] = stload.load(params.sys_ID)
             
             params.star_mark = params.star_mark + 1
             params.system_mark = params.system_mark + 1
-            print("4. sys_ID = ", params.sys_ID, "    4. gal_ID = ", params.gal_ID, "    star_ID = ", params.star_ID, "hole_ID = ", params.hole_ID)
-            print("4.   star_mark = ", params.star_mark, "    system_mark = ", params.system_mark)
+
+            --SAVE INFORMATION
+           
+        
+            -- print("4. sys_ID = ", params.sys_ID, "    4. gal_ID = ", params.gal_ID, "    star_ID = ", params.star_ID, "hole_ID = ", params.hole_ID)
+            -- print("4.   star_mark = ", params.star_mark, "    system_mark = ", params.system_mark)
+
+            loadsave.saveTable(planets, "planets.json" , system.DocumentsDirectory)
+            loadsave.saveTable(stars, "stars.json" , system.DocumentsDirectory)
+            loadsave.saveTable(solar_sys, "solar_sys.json" , system.DocumentsDirectory)
+            loadsave.saveTable(galaxy, "galaxy.json" , system.DocumentsDirectory)
+            loadsave.saveTable(universe, "universe.json" , system.DocumentsDirectory)
+            loadsave.saveTable(multiverse, "multiverse.json" , system.DocumentsDirectory)
+            loadsave.saveTable( blackholes, "blackholes.json" , system.DocumentsDirectory)
+
+
         end 
+
+        loadsave.saveTable(params, "params.json" , system.DocumentsDirectory)
+
         composer.removeHidden()
         composer.gotoScene("scripts.scene_solarsystem", "slideLeft")
     end
+
+
+    
 
     return true
 end
@@ -95,7 +129,17 @@ end
 function goto_menu(event)
     
     if(event.phase == "ended") then
+
         --find a way to save information
+        loadsave.saveTable(params, "params.json" , system.DocumentsDirectory)
+        loadsave.saveTable(planets, "planets.json" , system.DocumentsDirectory)
+        loadsave.saveTable(stars, "stars.json" , system.DocumentsDirectory)
+        loadsave.saveTable(solar_sys, "solar_sys.json" , system.DocumentsDirectory)
+        loadsave.saveTable(galaxy, "galaxy.json" , system.DocumentsDirectory)
+        loadsave.saveTable(universe, "universe.json" , system.DocumentsDirectory)
+        loadsave.saveTable(multiverse, "multiverse.json" , system.DocumentsDirectory)
+        loadsave.saveTable(blackholes, "blackholes.json" , system.DocumentsDirectory)
+
         composer.removeHidden()
         composer.gotoScene("scripts.scene_menu", "fade")
 
@@ -115,7 +159,10 @@ function scene:create( event )
     local sceneGroup = self.view
     -- Code here runs when the scene is first created but has not yet appeared on screen
     --print(params.P_ID)
-    current_planet = display.newImageRect( sceneGroup,data.planets[params.P_ID]:get_image(), 500, 500 )
+
+    --print(planets[1]:get_image() == nil)
+
+    current_planet = display.newImageRect( sceneGroup, planets[params.P_ID].image, 500, 500 )
     
     current_planet.x = 330 ; current_planet.y = 550
     transition.to( current_planet, { rotation=-365, time=65000, iterations =0 } )

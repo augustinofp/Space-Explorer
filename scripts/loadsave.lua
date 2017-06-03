@@ -28,33 +28,39 @@ function M.saveTable(t, filename, location)
 end
  
 function M.loadTable(filename, location)
+
     if location and (not _validLocations[location]) then
-     error("Attempted to load a table from an invalid location", 2)
+        
+        error("Attempted to load a table from an invalid location", 2)
     elseif not location then
-      location = _defaultLocation
+        
+        location = _defaultLocation
     end
+
     local path = system.pathForFile( filename, location)
     local contents = ""
     local myTable = {}
     local file = io.open( path, "r" )
     if file then
+        
         -- read all contents of file into a string
         local contents = file:read( "*a" )
         myTable = json.decode(contents);
         io.close( file )
         return myTable
     end
+    print("no file found")
     return nil
 end
 
 function M.changeDefault(location)
-	if location and (not location) then
-		error("Attempted to change the default location to an invalid location", 2)
-	elseif not location then
-		location = _realDefaultLocation
-	end
-	_defaultLocation = location
-	return true
+    if location and (not location) then
+        error("Attempted to change the default location to an invalid location", 2)
+    elseif not location then
+        location = _realDefaultLocation
+    end
+    _defaultLocation = location
+    return true
 end
 
 function M.print_r ( t ) 

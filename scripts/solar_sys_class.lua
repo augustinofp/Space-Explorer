@@ -11,8 +11,8 @@ function solar.new(planet_number, p_start, sys_ID, gal_ID, p_init)
 	self.init = p_init
 	--self.ring_size = ring_size
 	return self
-end  
 
+end  
 function solar.set_pnum(self, number)
 	self.pnum = number
 
